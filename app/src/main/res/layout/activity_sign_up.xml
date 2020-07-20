@@ -8,6 +8,7 @@
     tools:context=".SignUpActivity">
 
     <EditText
+        android:id="@+id/sgfirstname"
         android:layout_width="254dp"
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
@@ -20,6 +21,7 @@
         android:fontFamily="@font/regular"/>
 
     <EditText
+        android:id="@+id/sglastname"
         android:layout_width="254dp"
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
@@ -31,7 +33,9 @@
         android:textSize="16sp"
         android:fontFamily="@font/regular"/>
 
-    <EditText android:layout_width="254dp"
+    <EditText
+        android:id="@+id/sgemail"
+        android:layout_width="254dp"
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="22dp"
@@ -43,6 +47,7 @@
         android:fontFamily="@font/regular"/>
 
     <EditText
+        android:id="@+id/sgpassword"
         android:layout_width="254dp"
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
@@ -55,6 +60,7 @@
         android:fontFamily="@font/regular"/>
 
     <Button
+        android:id="@+id/signupbtn"
         android:layout_width="254dp"
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
@@ -67,7 +73,7 @@
         android:textSize="16sp"/>
 
     <ImageView
-        android:id="@+id/google_login"
+        android:id="@+id/google_signup"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/google_logo"
