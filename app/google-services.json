@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "542216000479",
+    "firebase_url": "https://unlost-app.firebaseio.com",
+    "project_id": "unlost-app",
+    "storage_bucket": "unlost-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542216000479:android:cb6b814f50bb4468ba6a6a",
+        "android_client_info": {
+          "package_name": "com.example.unlost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542216000479-tgs9bn2sk8c99rjb9eo471on73e1snh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbclw26x2FBzYzW1LkQgu4buR0G70x7iA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542216000479-tgs9bn2sk8c99rjb9eo471on73e1snh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
