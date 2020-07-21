@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn= findViewById(R.id.logbtn);
 
         mAuth = FirebaseAuth.getInstance();
-
         signuptxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 String upassword= logpassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(uemail) || TextUtils.isEmpty(upassword)){
-                    Toast.makeText(LoginActivity.this, "Empty Crediential(s)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Empty Credential(s)", Toast.LENGTH_SHORT).show();
                 }
 
                 else{
