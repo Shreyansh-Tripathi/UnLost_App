@@ -21,9 +21,8 @@ public class SignUpActivity extends AppCompatActivity {
         sgfirstName= findViewById(R.id.sgfirstname);
         sglastName= findViewById(R.id.sglastname);
         sgPassword= findViewById(R.id.sgpassword);
-
+        sgEmail=findViewById(R.id.sgemail);
         signupbtn= findViewById(R.id.signupbtn);
-
         googleSignUp= findViewById(R.id.google_signup);
     }
 }
