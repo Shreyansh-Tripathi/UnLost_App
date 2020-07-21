@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timerbg"
+    tools:context=".ReminderActivity">
+
+    <RelativeLayout
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_toStartOf="@+id/mins"
+            android:text="@string/h"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/mins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/m"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_toEndOf="@+id/mins"
+            android:text="@string/s"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/ethours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@+id/etmins"
+            android:hint="@string/_00"
+            android:textColor="@color/black"
+            />
+
+        <EditText
+            android:id="@+id/etmins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="@string/_00"
+            android:textColor="@color/black"
+             />
+
+        <EditText
+            android:id="@+id/etsecs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:hint="@string/_00"
+            android:layout_toEndOf="@+id/etmins"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/startTimerbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/buttonbg"
+        android:text="@string/go"
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
+
+</LinearLayout>

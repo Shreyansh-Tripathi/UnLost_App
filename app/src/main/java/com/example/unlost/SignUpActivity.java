@@ -65,7 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
         googleSignUp= findViewById(R.id.google_signup);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("542216000479-tgs9bn2sk8c99rjb9eo471on73e1snh5.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 

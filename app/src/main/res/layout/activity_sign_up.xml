@@ -66,7 +66,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="36dp"
         android:gravity="center"
-        android:background="@drawable/button"
+        android:background="@drawable/buttonbg"
         android:text="@string/sign_up"
         android:textColor="@color/white"
         android:fontFamily="@font/regular"

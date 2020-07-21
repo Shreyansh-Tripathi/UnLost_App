@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 Toast.makeText(LoginActivity.this, "Logged In", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, ChooseActivity.class));
-                                finish();
+                                LoginActivity.this.finish();
                             }
                             else
                             {
@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("542216000479-tgs9bn2sk8c99rjb9eo471on73e1snh5.apps.googleusercontent.com")
+                    .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
 
@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                             Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
                             updateUI(null);
-                                finish();
+                            LoginActivity.this.finish();
                         }
                     }
                 });

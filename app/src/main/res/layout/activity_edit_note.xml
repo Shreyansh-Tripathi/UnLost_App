@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditNoteActivity">
+
+    <EditText
+        android:id="@+id/editnoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/title"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/notebold"
+        android:background="@null"
+        android:autofillHints="no"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editnoteContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="14"
+        android:fontFamily="@font/noteregular"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:textSize="18sp"
+        android:hint="@string/description"
+        android:gravity="start|top"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        android:autofillHints="no"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/camerabtn"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/camera"
+            android:background="@color/white"
+             />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gallerybtn"
+            android:layout_marginStart="15dp"
+            android:background="@color/white"
+            android:src="@drawable/insert_photo"
+            />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reminderbtn"
+            android:src="@drawable/reminder_on"
+            android:background="@color/white"
+            android:layout_marginStart="15dp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

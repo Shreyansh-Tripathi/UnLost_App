@@ -46,7 +46,7 @@
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="36dp"
-        android:background="@drawable/button"
+        android:background="@drawable/buttonbg"
         android:fontFamily="@font/regular"
         android:gravity="center"
         android:text="@string/login"
