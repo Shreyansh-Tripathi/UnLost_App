@@ -3,8 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".EditNoteActivity">
+    tools:context=".activities.EditNoteActivity">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notebackbtn"
+        android:src="@drawable/goback"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        />
 
     <EditText
         android:id="@+id/editnoteTitle"
@@ -12,9 +23,11 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:hint="@string/title"
+        android:layout_marginTop="15dp"
         android:textSize="20sp"
+        android:paddingStart="10dp"
         android:gravity="center_vertical"
-        android:fontFamily="@font/notebold"
+        android:fontFamily="@font/bold"
         android:background="@null"
         android:autofillHints="no"
         android:inputType="text" />
@@ -24,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="14"
+        android:paddingStart="10dp"
         android:fontFamily="@font/noteregular"
         android:layout_marginTop="10dp"
         android:ems="10"
@@ -63,11 +77,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/reminderbtn"
-            android:src="@drawable/reminder_on"
+            android:src="@drawable/reminder_off"
             android:background="@color/white"
             android:layout_marginStart="15dp"
             />
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteNotebtn"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/delete"
+            android:background="@color/white"/>
     </LinearLayout>
 
 </LinearLayout>

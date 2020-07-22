@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Lost_and_Found_activity">
+    tools:context=".activities.Lost_and_Found_activity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.unlost;
+package com.example.unlost.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.unlost.R;
 
 public class ReminderActivity extends Activity {
 
@@ -33,7 +35,7 @@ public class ReminderActivity extends Activity {
         int width= displayMetrics.widthPixels;
         int height= displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width*.8), (int)(height*.5));
+        getWindow().setLayout((int)(width*.7), (int)(height*.5));
 
         WindowManager.LayoutParams params= getWindow().getAttributes();
         params.gravity= Gravity.CENTER;
@@ -46,10 +48,10 @@ public class ReminderActivity extends Activity {
             @Override
             public void onClick(View v)
             {
-                if (ethours.getText().toString().trim().isEmpty() || etmins.getText().toString().trim().isEmpty()
-                        || etsecs.getText().toString().trim().isEmpty())
+                if (ethours.getText().toString().trim().isEmpty() && etmins.getText().toString().trim().isEmpty()
+                        && etsecs.getText().toString().trim().isEmpty())
                 {
-                    Toast.makeText(ReminderActivity.this, "No values found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReminderActivity.this, "No Values found", Toast.LENGTH_SHORT).show();
                 }
 
                 else {
@@ -61,6 +63,7 @@ public class ReminderActivity extends Activity {
                       int total= secs + (mins*60) + (hours*60*60);
                       intent.putExtra(totaltime, total);
                       setResult(RESULT_OK, intent);
+
                       ReminderActivity.this.finish();
                 }
             }

@@ -1,8 +1,10 @@
-package com.example.unlost;
+package com.example.unlost.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.unlost.R;
 
 public class Lost_and_Found_activity extends AppCompatActivity {
 

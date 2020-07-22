@@ -1,4 +1,4 @@
-package com.example.unlost;
+package com.example.unlost.activities;
 
 public class Note {
     private String noteTitle;

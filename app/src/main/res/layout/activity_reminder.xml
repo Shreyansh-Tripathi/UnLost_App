@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/timerbg"
-    tools:context=".ReminderActivity">
+    tools:context=".activities.ReminderActivity">
 
     <RelativeLayout
         android:layout_marginTop="100dp"
