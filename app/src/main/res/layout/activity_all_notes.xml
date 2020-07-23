@@ -18,6 +18,20 @@
         android:onClick="backPressed"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/backbtn"
+        android:background="@null"
+        android:text="To Remember"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="35dp"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:fontFamily="sans-serif-black"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +51,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="15dp"
         android:background="@null"
-        app:srcCompat="@drawable/button" />
+        app:srcCompat="@drawable/button"
+        android:contentDescription="@string/add_note" />
 
 </RelativeLayout>

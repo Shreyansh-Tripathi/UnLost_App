@@ -1,7 +1,6 @@
 package com.example.unlost.activities;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -10,16 +9,16 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -38,6 +37,7 @@ public class EditNoteActivity extends AppCompatActivity {
     final static int notifyId=2;
     public static final String EDIT_NOTE_ID="edit_note_id";
     public static final String DELETE_NOTE="deleteNote";
+    boolean activetimer=false;
     int id;
 
     @Override
@@ -58,6 +58,9 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                final InputMethodManager iManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert iManager != null;
+                iManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
 
@@ -102,15 +105,14 @@ public class EditNoteActivity extends AppCompatActivity {
         reminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 reminderBtn.setTag("reminder_off");
-                if (reminderBtn.getId() == R.id.reminder_off)
-                {
-                    Intent intent= new Intent(EditNoteActivity.this, ReminderActivity.class);
+                if (!activetimer) {
+                    Intent intent = new Intent(EditNoteActivity.this, ReminderActivity.class);
                     startActivityForResult(intent, RQ_CODE);
                 }
                 else {
-                        reminderBtn.setImageResource(R.drawable.reminder_off);
-                    Toast.makeText(EditNoteActivity.this, "Cancelled!", Toast.LENGTH_SHORT).show();
+                    reminderBtn.setImageResource(R.drawable.reminder_off);
+                    reminder.cancel();
+                    Toast.makeText(EditNoteActivity.this, "Reminder Off", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -162,7 +164,7 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Intent intent=new Intent(EditNoteActivity.this, AllNotesActivity.class);
+                Intent intent=new Intent();
                 intent.putExtra(EDIT_NOTE_ID, note_id);
                 intent.putExtra(DELETE_NOTE, true);
                 setResult(RESULT_OK, intent);
@@ -189,7 +191,7 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Intent intent=new Intent(EditNoteActivity.this, AllNotesActivity.class);
+                Intent intent=new Intent();
                 intent.putExtra(EDIT_NOTE_ID, noteId);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -209,7 +211,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
-                    countertimer((long)total_secs);
+                    countertimer(total_secs);
                 }
                 else
                     Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show();
@@ -217,19 +219,23 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void countertimer(long timer)
+    public void countertimer(final long timer)
     {
         notifyReminderInProgress();
+        reminderBtn.setImageResource(R.drawable.reminder_on);
         reminder = new CountDownTimer(timer * 1000 + 100, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                  activetimer=true;
             }
 
             @Override
             public void onFinish() {
+                activetimer=false;
                 notifyReminderFinished();
+                reminderBtn.setImageResource(R.drawable.reminder_off);
                 reminder.cancel();
+                Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
             }
         }.start();
     }

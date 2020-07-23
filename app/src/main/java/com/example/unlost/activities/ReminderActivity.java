@@ -1,12 +1,15 @@
 package com.example.unlost.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,7 +38,7 @@ public class ReminderActivity extends Activity {
         int width= displayMetrics.widthPixels;
         int height= displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width*0.7), (int)(height*0.5));
+        getWindow().setLayout((int)(width*0.7), (int)(height*0.4));
 
         WindowManager.LayoutParams params= getWindow().getAttributes();
         params.gravity= Gravity.CENTER;
@@ -55,16 +58,37 @@ public class ReminderActivity extends Activity {
                 }
 
                 else {
-                    int hours = Integer.parseInt(ethours.getText().toString().trim());
-                    int mins = Integer.parseInt(etmins.getText().toString().trim());
-                    int secs = Integer.parseInt(etsecs.getText().toString().trim());
 
-                    int total= secs + (mins*60) + (hours*60*60);
+                   try {
+                       if (TextUtils.isEmpty(ethours.getText().toString()))
+                           ethours.setText("0");
 
-                    Intent intent = new Intent(ReminderActivity.this, EditNoteActivity.class );
-                    intent.putExtra(totaltime, total);
-                    setResult(RESULT_OK, intent);
-                    ReminderActivity.this.finish();
+                       if (TextUtils.isEmpty(etmins.getText().toString()))
+                           etmins.setText("0");
+
+                       if (TextUtils.isEmpty(etsecs.getText().toString()))
+                           etsecs.setText("0");
+
+                       int hours = Integer.parseInt(ethours.getText().toString());
+                       int mins = Integer.parseInt(etmins.getText().toString());
+                       int secs = Integer.parseInt(etsecs.getText().toString());
+
+                       int total= secs + (mins*60) + (hours*60*60);
+                       final InputMethodManager iManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                       assert iManager != null;
+                       iManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                       Intent intent = new Intent(ReminderActivity.this, EditNoteActivity.class );
+                       intent.putExtra(totaltime, total);
+                       setResult(RESULT_OK, intent);
+                       ReminderActivity.this.finish();
+
+                   }catch (Exception e)
+                   {
+                       Toast.makeText(ReminderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                   }
+
+
                 }
             }
         });

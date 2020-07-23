@@ -20,7 +20,8 @@
             android:layout_marginEnd="40dp"
             android:layout_toStartOf="@+id/mins"
             android:text="@string/h"
-            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textColor="@color/white"
             tools:ignore="RelativeOverlap" />
 
         <TextView
@@ -28,8 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textSize="25sp"
             android:text="@string/m"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             />
 
         <TextView
@@ -37,8 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_toEndOf="@+id/mins"
+            android:textSize="25sp"
             android:text="@string/s"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -52,20 +55,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="25dp"
+            android:textSize="25sp"
             android:inputType="number"
+            android:textColorHint="@color/white"
             android:layout_toStartOf="@+id/etmins"
             android:hint="@string/_00"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             />
 
         <EditText
             android:id="@+id/etmins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            android:textSize="25sp"
             android:layout_gravity="center"
             android:inputType="number"
             android:hint="@string/_00"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:importantForAutofill="no" />
 
         <EditText
@@ -74,9 +81,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:hint="@string/_00"
+            android:textSize="25sp"
+            android:textColorHint="@color/white"
             android:layout_toEndOf="@+id/etmins"
             android:inputType="number"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:autofillHints="@null" />
     </RelativeLayout>
 
@@ -87,8 +96,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@drawable/buttonbg"
+        android:backgroundTint="@color/white"
         android:text="@string/go"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="18sp"/>
 
 </LinearLayout>
