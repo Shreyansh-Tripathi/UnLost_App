@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.unlost.entities.NoteEntity;
+import com.example.unlost.entities.Note;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import java.util.List;
 public interface NoteDao {
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
-    List<NoteEntity> getALlNotes();
+    List<Note> getAllNotes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertNote(NoteEntity note);
+    void insertNote(Note note);
 
     @Delete
-    void deleteNote(NoteEntity note);
+    void deleteNote(Note note);
 
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 @Entity(tableName = "notes")
-public class NoteEntity implements Serializable {
+public class Note implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

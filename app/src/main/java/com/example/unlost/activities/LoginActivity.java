@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView googlelogin;
     Button loginbtn;
     private FirebaseAuth mAuth;
+    static FirebaseUser user;
     GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn= findViewById(R.id.logbtn);
         final InputMethodManager iManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         mAuth = FirebaseAuth.getInstance();
+        user=mAuth.getCurrentUser();
 
         signuptxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +61,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        if(mAuth.getCurrentUser() != null)
-        {
+
+        if (user != null){
             startActivity(new Intent(LoginActivity.this, ChooseActivity.class));
-            finish();
+            LoginActivity.this.finish();
         }
 
         else

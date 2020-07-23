@@ -13,15 +13,17 @@
         android:id="@+id/backbtn"
         android:src="@drawable/goback"
         android:background="@null"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:onClick="backPressed"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
         android:layout_below="@+id/backbtn"
         android:id="@+id/recNotes"
         />
@@ -32,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="15dp"
         android:background="@null"
         app:srcCompat="@drawable/button" />
 

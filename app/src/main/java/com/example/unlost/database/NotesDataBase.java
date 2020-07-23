@@ -6,9 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.unlost.entities.NoteEntity;
+import com.example.unlost.entities.Note;
 
-@Database(entities = NoteEntity.class, version = 1, exportSchema = false)
+@Database(entities = Note.class, version = 1, exportSchema = false)
 public abstract class NotesDataBase extends RoomDatabase {
 
     private static NotesDataBase notesDataBase;

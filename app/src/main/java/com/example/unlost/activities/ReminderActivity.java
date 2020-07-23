@@ -35,14 +35,14 @@ public class ReminderActivity extends Activity {
         int width= displayMetrics.widthPixels;
         int height= displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width*.7), (int)(height*.5));
+        getWindow().setLayout((int)(width*0.7), (int)(height*0.5));
 
         WindowManager.LayoutParams params= getWindow().getAttributes();
         params.gravity= Gravity.CENTER;
         params.x=0;
-        params.y=-10;
+        params.y=0;
 
-        getWindow().setAttributes(params);
+        getWindow().setAttributes(params);;
 
         startTimerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +51,7 @@ public class ReminderActivity extends Activity {
                 if (ethours.getText().toString().trim().isEmpty() && etmins.getText().toString().trim().isEmpty()
                         && etsecs.getText().toString().trim().isEmpty())
                 {
-                    Toast.makeText(ReminderActivity.this, "No Values found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReminderActivity.this, "No Values found!", Toast.LENGTH_SHORT).show();
                 }
 
                 else {
@@ -59,12 +59,12 @@ public class ReminderActivity extends Activity {
                     int mins = Integer.parseInt(etmins.getText().toString().trim());
                     int secs = Integer.parseInt(etsecs.getText().toString().trim());
 
-                    Intent intent = new Intent();
-                      int total= secs + (mins*60) + (hours*60*60);
-                      intent.putExtra(totaltime, total);
-                      setResult(RESULT_OK, intent);
+                    int total= secs + (mins*60) + (hours*60*60);
 
-                      ReminderActivity.this.finish();
+                    Intent intent = new Intent(ReminderActivity.this, EditNoteActivity.class );
+                    intent.putExtra(totaltime, total);
+                    setResult(RESULT_OK, intent);
+                    ReminderActivity.this.finish();
                 }
             }
         });

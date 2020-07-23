@@ -5,11 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.unlost.R;
+import com.example.unlost.entities.Note;
 
 import java.util.ArrayList;
 
@@ -57,12 +56,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull NotesAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(notesList.get(position));
-        holder.nTitle.setText(notesList.get(position).getNoteTitle());
-        holder.nContent.setText(notesList.get(position).getNoteDetails());
+        holder.nTitle.setText(notesList.get(position).getTitle());
+        holder.nContent.setText(notesList.get(position).getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return notesList.size();
     }
 }
