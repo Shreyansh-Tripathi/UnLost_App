@@ -29,8 +29,8 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
     static NotesAdapter notesAdapter;
     static ArrayList<Note> AllNotes;
     TextView noteTitle, noteContent;
-    public static final int ADDNOTE_REQUEST=-1;
-    public static final int GETALLNOTES=2;
+    public static final int ADDNOTE_REQUEST=2;
+    public static final int GETALLNOTES=1;
     public static final String NOTE_ID="note_Id";
     public static int UPDATENOTE_REQUEST= 3;
 
@@ -81,22 +81,22 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
                      notesAdapter.notifyDataSetChanged();
 
                  }
-                 else if (request_code == ADDNOTE_REQUEST)
+                 else if (request_code == AllNotes.size()-1)
                  {
-                     AllNotes.add(0, notes.get(0));
-                     notesAdapter.notifyItemInserted(0);
-                     recNotes.smoothScrollToPosition(0);
+                     AllNotes.add(request_code, notes.get(request_code));
+                     notesAdapter.notifyItemInserted(request_code);
+                     
                  }
-                 else if (request_code == UPDATENOTE_REQUEST)
+                 else
                  {
-                     AllNotes.remove(UPDATENOTE_REQUEST);
+                     AllNotes.remove(request_code);
                      if (isNoteDeleted)
                      {
-                         notesAdapter.notifyItemRemoved(UPDATENOTE_REQUEST);
+                         notesAdapter.notifyItemRemoved(request_code);
                      }
-                     else if (UPDATENOTE_REQUEST != -1){
-                         AllNotes.add(UPDATENOTE_REQUEST, notes.get(UPDATENOTE_REQUEST));
-                         notesAdapter.notifyItemChanged(UPDATENOTE_REQUEST);
+                     else if (request_code != -1){
+                         AllNotes.add(request_code, notes.get(request_code));
+                         notesAdapter.notifyItemChanged(request_code);
                      }
                  }
              }
@@ -116,14 +116,14 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode== ADDNOTE_REQUEST && resultCode==RESULT_OK)
         {
-            getAllNotes(ADDNOTE_REQUEST, false);
+            if (data!=null)
+                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), false);
         }
         else if (requestCode==UPDATENOTE_REQUEST && resultCode==RESULT_OK)
         {
-                if (data!=null){
-                    UPDATENOTE_REQUEST=data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1);
-                    getAllNotes(UPDATENOTE_REQUEST, data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
-                }
+            if (data!=null){
+                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
+            }
         }
     }
     public void backPressed(View view){

@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -27,18 +28,20 @@ import com.example.unlost.R;
 import com.example.unlost.database.NotesDataBase;
 import com.example.unlost.entities.Note;
 
+import static com.example.unlost.notification.NotificationChannel.channelId;
+
 public class EditNoteActivity extends AppCompatActivity {
 
     EditText editnoteTitle, editnoteContent;
     ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn;
     CountDownTimer reminder;
-    NotificationManagerCompat manager;
+    private NotificationManagerCompat manager;
     final static int RQ_CODE=1;
-    final static int notifyId=2;
+    final static int notifyId1=2;
     public static final String EDIT_NOTE_ID="edit_note_id";
     public static final String DELETE_NOTE="deleteNote";
     boolean activetimer=false;
-    int id;
+    int id=-99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +115,8 @@ public class EditNoteActivity extends AppCompatActivity {
                 else {
                     reminderBtn.setImageResource(R.drawable.reminder_off);
                     reminder.cancel();
-                    Toast.makeText(EditNoteActivity.this, "Reminder Off", Toast.LENGTH_SHORT).show();
+                    notifyReminderFinished(v);
+                    activetimer=false;
                 }
             }
         });
@@ -193,6 +197,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 Intent intent=new Intent();
                 intent.putExtra(EDIT_NOTE_ID, noteId);
+                intent.putExtra(DELETE_NOTE, false);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -211,7 +216,8 @@ public class EditNoteActivity extends AppCompatActivity {
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
-                    countertimer(total_secs);
+                    notifyReminderInProgress(reminderBtn);
+                    countertimer(total_secs, reminderBtn);
                 }
                 else
                     Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show();
@@ -219,9 +225,8 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void countertimer(final long timer)
+    public void countertimer(final long timer, final View v)
     {
-        notifyReminderInProgress();
         reminderBtn.setImageResource(R.drawable.reminder_on);
         reminder = new CountDownTimer(timer * 1000 + 100, 1000) {
             @Override
@@ -231,25 +236,27 @@ public class EditNoteActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                activetimer=false;
-                notifyReminderFinished();
+                notifyReminderFinished(v);
                 reminderBtn.setImageResource(R.drawable.reminder_off);
                 reminder.cancel();
+                activetimer=false;
                 Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
             }
         }.start();
     }
 
-    public void notifyReminderInProgress()
+
+    private void notifyReminderInProgress(View view)
     {
         Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification notification= new NotificationCompat.Builder(this)
-                .setOnlyAlertOnce(true)
+        Notification notification= new NotificationCompat.Builder(this, channelId)
                 .setContentIntent(gotoapp)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(Notification.CATEGORY_ALARM)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("Reminder")
                 .setContentText("In Progress")
                 .setColor(Color.BLUE)
@@ -257,26 +264,27 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setOngoing(true)
                 .build();
 
-        manager.notify(notifyId, notification);
+        manager.notify(notifyId1, notification);
     }
 
-    public void notifyReminderFinished()
+
+    private void notifyReminderFinished(View view)
     {
         Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification notification= new NotificationCompat.Builder(this)
-                .setOnlyAlertOnce(true)
+        Notification notification= new NotificationCompat.Builder(this,channelId)
                 .setContentIntent(gotoapp)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(Notification.CATEGORY_ALARM)
                 .setContentTitle("Reminder")
                 .setContentText("Finished")
                 .setColor(Color.BLUE)
                 .setSmallIcon(R.drawable.reminder_over)
-                .setOngoing(true)
                 .build();
-        manager.notify(notifyId, notification);
+
+        manager.notify(notifyId1, notification);
     }
 }
