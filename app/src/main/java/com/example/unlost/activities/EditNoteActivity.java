@@ -262,7 +262,7 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         if(requestCode==REQUEST_CODE_CAMERA && grantResults.length>0)
         {
-            if(grantResults[1]==PackageManager.PERMISSION_GRANTED)
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
                 openCamera();
             }
