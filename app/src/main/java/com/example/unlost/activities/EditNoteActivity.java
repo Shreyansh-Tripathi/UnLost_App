@@ -107,11 +107,11 @@ public class EditNoteActivity extends AppCompatActivity {
                 if(note.getImagePath2()!=null)
                 {
                     imgShow2.setVisibility(View.VISIBLE);
-                    imgShow2.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
+                    imgShow2.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath2()));
                     if(note.getImagePath3()!=null)
                     {
                         imgShow3.setVisibility(View.VISIBLE);
-                        imgShow3.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
+                        imgShow3.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath3()));
                     }
                 }
             }
@@ -262,7 +262,7 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         if(requestCode==REQUEST_CODE_CAMERA && grantResults.length>0)
         {
-            if(grantResults[1]==PackageManager.PERMISSION_GRANTED)
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
             {
                 openCamera();
             }
