@@ -1,10 +1,14 @@
 package com.example.unlost.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -12,36 +16,52 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.unlost.R;
 import com.example.unlost.database.NotesDataBase;
 import com.example.unlost.entities.Note;
 
-import static com.example.unlost.notification.NotificationChannel.channelId;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class EditNoteActivity extends AppCompatActivity {
 
     EditText editnoteTitle, editnoteContent;
     ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn;
     CountDownTimer reminder;
-    private NotificationManagerCompat manager;
+    NotificationManagerCompat manager;
     final static int RQ_CODE=1;
-    final static int notifyId1=2;
+    final static int notifyId=2;
     public static final String EDIT_NOTE_ID="edit_note_id";
     public static final String DELETE_NOTE="deleteNote";
     boolean activetimer=false;
-    int id=-99;
+    private static final int REQUEST_CODE_STORAGE_PERMISSION=3;
+    private static final int REQUEST_CODE_CAMERA=5;
+    private static final int REQUEST_CODE_SELECT_IMAGE=4;
+    private static final int REQUEST_CODE_CAPTURE_IMAGE=6;
+    String selectedImagePath1="",selectedImagePath2="",selectedImagePath3="";
+    ImageView imgShow1,imgShow2,imgShow3;
+    LinearLayout imgLayout;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +74,10 @@ public class EditNoteActivity extends AppCompatActivity {
         galleryBtn=findViewById(R.id.gallerybtn);
         reminderBtn=findViewById(R.id.reminderbtn);
         deletebtn=findViewById(R.id.deleteNotebtn);
+        imgShow1=findViewById(R.id.imgShow1);
+        imgShow2=findViewById(R.id.imgShow2);
+        imgShow3=findViewById(R.id.imgShow3);
+        imgLayout=findViewById(R.id.imgLayout);
 
         manager= NotificationManagerCompat.from(this);
 
@@ -73,6 +97,24 @@ public class EditNoteActivity extends AppCompatActivity {
         if (id != -1){
             editnoteTitle.setText(AllNotesActivity.AllNotes.get(id).getTitle());
             editnoteContent.setText(AllNotesActivity.AllNotes.get(id).getDescription());
+            final Note note = AllNotesActivity.AllNotes.get(id);
+            if(note.getImagePath1() != null)
+            {
+                imgLayout.setVisibility(View.VISIBLE);
+                imgShow1.setVisibility(View.VISIBLE);
+                imgShow1.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
+                if(note.getImagePath2()!=null)
+                {
+                    imgShow2.setVisibility(View.VISIBLE);
+                    imgShow2.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
+                    if(note.getImagePath3()!=null)
+                    {
+                        imgShow3.setVisibility(View.VISIBLE);
+                        imgShow3.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
+                    }
+                }
+            }
+
         }
 
         else {
@@ -91,17 +133,69 @@ public class EditNoteActivity extends AppCompatActivity {
             deletebtn.setVisibility(View.VISIBLE);
         }
 
+
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(imgShow3.getDrawable()!=null)
+                {
+                    Toast.makeText(EditNoteActivity.this, "you cannot store more than 3 images!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(EditNoteActivity.this,
+                                new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+                    } else {
+                        openCamera();
+                    }
+                }
             }
         });
 
         galleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(imgShow3.getDrawable()!=null)
+                {
+                    Toast.makeText(EditNoteActivity.this, "you cannot store more than 3 images!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(EditNoteActivity.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
+                    } else {
+                        selectImage();
+                    }
+                }
+            }
+        });
+        imgShow1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Note note = AllNotesActivity.AllNotes.get(id);
+                Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
+                intent.putExtra("imagePath",note.getImagePath1());
+                startActivity(intent);
+            }
+        });
+        imgShow2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Note note = AllNotesActivity.AllNotes.get(id);
+                Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
+                intent.putExtra("imagePath",note.getImagePath2());
+                startActivity(intent);
+            }
+        });
+        imgShow3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Note note = AllNotesActivity.AllNotes.get(id);
+                Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
+                intent.putExtra("imagePath",note.getImagePath3());
+                startActivity(intent);
             }
         });
 
@@ -115,8 +209,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 else {
                     reminderBtn.setImageResource(R.drawable.reminder_off);
                     reminder.cancel();
-                    notifyReminderFinished(v);
-                    activetimer=false;
+                    Toast.makeText(EditNoteActivity.this, "Reminder Off", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -135,6 +228,47 @@ public class EditNoteActivity extends AppCompatActivity {
                         .setNegativeButton("No", null).show();
             }
         });
+    }
+    private void openCamera() {
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivityForResult(intent,REQUEST_CODE_CAPTURE_IMAGE);
+        }
+    }
+
+    private void selectImage() {
+        Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivityForResult(intent,REQUEST_CODE_SELECT_IMAGE);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_CODE_STORAGE_PERMISSION && grantResults.length>0)
+        {
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                selectImage();
+            }
+            else
+            {
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(requestCode==REQUEST_CODE_CAMERA && grantResults.length>0)
+        {
+            if(grantResults[1]==PackageManager.PERMISSION_GRANTED)
+            {
+                openCamera();
+            }
+            else
+            {
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -197,7 +331,6 @@ public class EditNoteActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 Intent intent=new Intent();
                 intent.putExtra(EDIT_NOTE_ID, noteId);
-                intent.putExtra(DELETE_NOTE, false);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -216,17 +349,99 @@ public class EditNoteActivity extends AppCompatActivity {
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
-                    notifyReminderInProgress(reminderBtn);
-                    countertimer(total_secs, reminderBtn);
+                    countertimer(total_secs);
                 }
                 else
                     Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show();
             }
         }
+        if(requestCode==REQUEST_CODE_SELECT_IMAGE && resultCode==RESULT_OK)
+        {
+            if(data!=null) {
+                Uri selectedImageUri = data.getData();
+                processImage(selectedImageUri);
+            }
+
+        }
+        if(requestCode==REQUEST_CODE_CAPTURE_IMAGE && resultCode==RESULT_OK)
+        {
+            if(data!=null)
+            {
+                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                Uri capturedImageUri=getImageUri(this,capturedImage);
+                processImage(capturedImageUri);
+            }
+        }
+    }
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
-    public void countertimer(final long timer, final View v)
+    private void processImage(Uri imageUri) {
+        final Note note = AllNotesActivity.AllNotes.get(id);
+        if (imageUri!=null)
+        {
+            try{
+                imgLayout.setVisibility(View.VISIBLE);
+                InputStream inputStream=getContentResolver().openInputStream(imageUri);
+                Bitmap bitmap= BitmapFactory.decodeStream(inputStream);
+                if(imgShow1.getDrawable()==null)
+                {
+                    imgShow1.setVisibility(View.VISIBLE);
+                    imgShow1.setImageBitmap(bitmap);
+                    selectedImagePath1=getPathFromUri(imageUri);
+                    note.setImagePath1(selectedImagePath1);
+                }
+                else if(imgShow2.getDrawable()==null)
+                {
+                    imgShow2.setVisibility(View.VISIBLE);
+                    imgShow2.setImageBitmap(bitmap);
+                    selectedImagePath2=getPathFromUri(imageUri);
+                    note.setImagePath2(selectedImagePath2);
+                }
+                else if(imgShow3.getDrawable()==null)
+                {
+                    imgShow3.setVisibility(View.VISIBLE);
+                    imgShow3.setImageBitmap(bitmap);
+                    selectedImagePath3=getPathFromUri(imageUri);
+                    note.setImagePath3(selectedImagePath3);
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private String getPathFromUri(Uri contentUri)
     {
+        String filePath;
+        Cursor cursor=getContentResolver().query(
+                contentUri,null,null,null,null
+        );
+        if(cursor==null)
+        {
+            filePath=contentUri.getPath();
+        }
+        else
+        {
+            cursor.moveToFirst();
+            int index=cursor.getColumnIndex("_data");
+            filePath=cursor.getString(index);
+            cursor.close();
+        }
+        return filePath;
+    }
+
+    public void countertimer(final long timer)
+    {
+        notifyReminderInProgress();
         reminderBtn.setImageResource(R.drawable.reminder_on);
         reminder = new CountDownTimer(timer * 1000 + 100, 1000) {
             @Override
@@ -236,27 +451,25 @@ public class EditNoteActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                notifyReminderFinished(v);
+                activetimer=false;
+                notifyReminderFinished();
                 reminderBtn.setImageResource(R.drawable.reminder_off);
                 reminder.cancel();
-                activetimer=false;
                 Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
             }
         }.start();
     }
 
-
-    private void notifyReminderInProgress(View view)
+    public void notifyReminderInProgress()
     {
         Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification notification= new NotificationCompat.Builder(this, channelId)
-                .setContentIntent(gotoapp)
-                .setCategory(Notification.CATEGORY_ALARM)
+        Notification notification= new NotificationCompat.Builder(this)
                 .setOnlyAlertOnce(true)
-                .setAutoCancel(true)
+                .setContentIntent(gotoapp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(Notification.CATEGORY_ALARM)
                 .setContentTitle("Reminder")
                 .setContentText("In Progress")
                 .setColor(Color.BLUE)
@@ -264,27 +477,26 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setOngoing(true)
                 .build();
 
-        manager.notify(notifyId1, notification);
+        manager.notify(notifyId, notification);
     }
 
-
-    private void notifyReminderFinished(View view)
+    public void notifyReminderFinished()
     {
         Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification notification= new NotificationCompat.Builder(this,channelId)
+        Notification notification= new NotificationCompat.Builder(this)
+                .setOnlyAlertOnce(true)
                 .setContentIntent(gotoapp)
                 .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(Notification.CATEGORY_ALARM)
                 .setContentTitle("Reminder")
                 .setContentText("Finished")
                 .setColor(Color.BLUE)
                 .setSmallIcon(R.drawable.reminder_over)
+                .setOngoing(true)
                 .build();
-
-        manager.notify(notifyId1, notification);
+        manager.notify(notifyId, notification);
     }
 }
