@@ -27,8 +27,8 @@ public class ShowImage extends AppCompatActivity {
         imgBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ShowImage.this,EditNoteActivity.class);
-                startActivity(intent);
+                onBackPressed();
+                finish();
             }
         });
     }
