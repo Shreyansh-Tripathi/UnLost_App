@@ -29,7 +29,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="12"
                 android:gravity="center"
-                android:text="@string/lost"
+                android:text="Lost"
                 android:textColor="@color/white"
                 android:fontFamily="@font/regular"
                 android:textSize="22sp"
@@ -57,7 +57,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="12"
                 android:gravity="center"
-                android:text="@string/found"
+                android:text="Found"
                 android:textColor="@color/white"
                 android:fontFamily="@font/regular"
                 android:textSize="22sp"
@@ -79,10 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:id="@+id/lost_frag"
-        android:name="com.example.unlost.fragments.LostFragment"
-        tools:layout="@layout/fragment_lost"
-        />
+        tools:layout="@layout/fragment_found" />
 
 </LinearLayout>
 
