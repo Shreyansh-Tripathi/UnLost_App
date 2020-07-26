@@ -19,4 +19,13 @@
     <string name="logout">LOGOUT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_details">Enter Details</string>
+    <string name="enter_item_category">*Enter Item Category</string>
+    <string name="enter_brand_name">Enter Brand Name</string>
+    <string name="enter_item_details">*Enter Item Details</string>
+    <string name="enter_contact_details">*Enter Contact Details</string>
+    <string name="save">Save</string>
+    <string name="to_remember">To Remember</string>
+    <string name="found">Found</string>
+    <string name="lost">Lost</string>
 </resources>

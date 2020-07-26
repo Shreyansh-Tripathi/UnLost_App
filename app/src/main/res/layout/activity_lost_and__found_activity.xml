@@ -29,14 +29,14 @@
                 android:layout_height="0dp"
                 android:layout_weight="12"
                 android:gravity="center"
-                android:text="Lost"
+                android:text="@string/found"
                 android:textColor="@color/white"
                 android:fontFamily="@font/regular"
                 android:textSize="22sp"
                 android:paddingTop="35dp"/>
 
             <View
-                android:id="@+id/lost_line"
+                android:id="@+id/found_line"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -57,14 +57,14 @@
                 android:layout_height="0dp"
                 android:layout_weight="12"
                 android:gravity="center"
-                android:text="Found"
+                android:text="@string/lost"
                 android:textColor="@color/white"
                 android:fontFamily="@font/regular"
                 android:textSize="22sp"
                 android:paddingTop="35dp"/>
 
             <View
-                android:id="@+id/found_line"
+                android:id="@+id/lost_line"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -79,14 +79,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:visibility="gone"
+        android:id="@+id/found_frag"
+        android:name="com.example.unlost.fragments.FoundFragment"
         tools:layout="@layout/fragment_found" />
 
     <fragment
-        android:id="@+id/fragment"
+        android:id="@+id/lost_frag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
+        android:visibility="gone"
+        android:name="com.example.unlost.fragments.LostFragment"
         tools:layout="@layout/fragment_lost" />
 
 </LinearLayout>

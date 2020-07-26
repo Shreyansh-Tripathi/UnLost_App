@@ -1,33 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
     android:orientation="vertical"
-    tools:context=".Fragments.FoundFragment">
+    tools:context=".fragments.FoundFragment">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back_btn"
+        android:src="@drawable/goback"
+        android:background="@null"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:onClick="backPressed"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/enter_details"
+        android:textSize="22sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="35dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/bold"/>
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_weight="1"
-        android:background="#ffffff"
-        android:drawableRight="@drawable/ic_baseline_search_24"
-        android:elevation="10dp"
-        android:ems="10"
-        android:hint="Enter product name"
-        android:inputType="textPersonName"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content"
+        android:id="@+id/item_category"
+        android:background="@drawable/input_field"
+        android:hint="@string/enter_item_category"
+        android:layout_below="@+id/back_btn"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:fontFamily="@font/noteregular"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_weight="10" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/item_brand"
+        android:background="@drawable/input_field"
+        android:hint="@string/enter_brand_name"
+        android:layout_below="@+id/item_category"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:fontFamily="@font/noteregular"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/item_brief"
+        android:background="@drawable/input_field"
+        android:hint="@string/enter_item_details"
+        android:layout_below="@+id/item_brand"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:fontFamily="@font/noteregular"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact_details"
+        android:background="@drawable/input_field"
+        android:hint="@string/enter_contact_details"
+        android:layout_below="@+id/item_brief"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:fontFamily="@font/noteregular"/>
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_item"
+        android:background="@drawable/buttonbg"
+        android:text="@string/save"
+        android:layout_marginStart="110dp"
+        android:layout_marginEnd="110dp"
+        android:layout_below="@+id/contact_details"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:textSize="20sp"
+        />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/add_image"
+        android:paddingEnd="10dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/camera_white"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        tools:ignore="RtlSymmetry"
+        android:contentDescription="@null" />
+
+</RelativeLayout>
