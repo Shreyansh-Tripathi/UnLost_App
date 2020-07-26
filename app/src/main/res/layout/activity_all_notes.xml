@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/backbtn"
         android:background="@null"
-        android:text="To Remember"
+        android:text="@string/to_remember"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="35dp"
         android:textSize="20sp"
