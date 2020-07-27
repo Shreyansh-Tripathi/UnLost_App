@@ -21,6 +21,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class Lost_and_Found_activity extends AppCompatActivity {
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
     EditText item_category,item_brand,item_brief,contact_details;
     Button save_item;
+    ImageButton back_btn;
     LinearLayout add_image;
     TextView found_title,lost_title;
     View found_line, lost_line;
@@ -73,6 +75,14 @@ public class Lost_and_Found_activity extends AppCompatActivity {
         found_line=findViewById(R.id.found_line);
         lost_line=findViewById(R.id.lost_line);
         add_image=findViewById(R.id.add_image);
+        back_btn=findViewById(R.id.back_btn);
+
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         db=FirebaseFirestore.getInstance();
         user=FirebaseAuth.getInstance().getCurrentUser();
@@ -127,9 +137,12 @@ public class Lost_and_Found_activity extends AppCompatActivity {
                 String brief=item_brief.getText().toString();
                 String contact=contact_details.getText().toString();
 
-                if(TextUtils.isEmpty(category)||TextUtils.isEmpty(brief)||TextUtils.isEmpty(contact)||TextUtils.isEmpty(url))
+                if(TextUtils.isEmpty(category)||TextUtils.isEmpty(brief)||TextUtils.isEmpty(contact))
                 {
                     Toast.makeText(Lost_and_Found_activity.this, "Please enter all fields marked with *", Toast.LENGTH_SHORT).show();
+                }
+                else if (url==null){
+                    Toast.makeText(Lost_and_Found_activity.this, "Please Add Image of the Item", Toast.LENGTH_SHORT).show();
                 }
 
                 else
@@ -143,6 +156,14 @@ public class Lost_and_Found_activity extends AppCompatActivity {
                     item.put("Name",user.getDisplayName());
                     db.collection("Lost Items")
                             .document(category).collection(user.getUid()).add(item);
+                    Toast.makeText(Lost_and_Found_activity.this, "Item Registered!", Toast.LENGTH_SHORT).show();
+                    item_brand.setText(null);
+                    item_brief.setText(null);
+                    item_category.setText(null);
+                    contact_details.setText(null);
+                    image_uri=null;
+                    url=null;
+
                 }
             }
         });
@@ -153,7 +174,7 @@ public class Lost_and_Found_activity extends AppCompatActivity {
             Toast.makeText(this, "No file chosen", Toast.LENGTH_SHORT).show();
         }
         else {
-            final StorageReference reference= mStorageRef.child(user.getUid()+"."+getFileExtension(image_uri));
+            final StorageReference reference= mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(image_uri));
             mUploadTask= reference.putFile(image_uri)
                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                        @Override
@@ -189,7 +210,6 @@ public class Lost_and_Found_activity extends AppCompatActivity {
         } else {
             cameraIntent();
         }
-        uploadImage();
     }
 
     @Override
@@ -225,6 +245,7 @@ public class Lost_and_Found_activity extends AppCompatActivity {
             {
                 Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
                 image_uri=getImageUri(this,capturedImage);
+                uploadImage();
             }
         }
     }
