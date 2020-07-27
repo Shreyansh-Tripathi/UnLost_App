@@ -36,7 +36,7 @@ public class FoundFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FoundFragment.
+     * @return A nenstance of fragment FoundFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static FoundFragment newInstance(String param1, String param2) {

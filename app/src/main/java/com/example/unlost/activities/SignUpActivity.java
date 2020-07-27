@@ -101,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             }
             catch (ApiException e) {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();;
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -139,18 +139,20 @@ public class SignUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(SignUpActivity.this, "user registered succefully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "User Registered Successfully!", Toast.LENGTH_SHORT).show();
+
                     FirebaseUser user = auth.getCurrentUser();
 
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(fName+" "+lName).build();
 
+                    assert user != null;
                     user.updateProfile(profileUpdates)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(SignUpActivity.this, "Name added!!", Toast.LENGTH_SHORT).show();
+
                                         startActivity(new Intent(SignUpActivity.this,ChooseActivity.class));
                                         finish();
                                     }
@@ -160,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(SignUpActivity.this, "user cannot be registered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "User Cannot Be Registered", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -34,7 +34,8 @@
                 android:paddingTop="35dp"
                 android:text="@string/found"
                 android:textColor="@color/white"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:focusable="true" />
 
             <View
                 android:id="@+id/found_line"
@@ -63,7 +64,8 @@
                 android:paddingTop="35dp"
                 android:text="@string/lost"
                 android:textColor="@color/white"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:focusable="true" />
 
             <View
                 android:id="@+id/lost_line"

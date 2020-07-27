@@ -13,13 +13,14 @@
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="220dp"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/regular"
         android:gravity="center_vertical"
+        android:background="@drawable/input_field"
         android:hint="@string/first_name"
-        android:inputType="text"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:inputType="textPersonName"
+        android:fontFamily="@font/regular"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/sglastname"
@@ -27,13 +28,14 @@
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="22dp"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/regular"
         android:gravity="center_vertical"
+        android:background="@drawable/input_field"
         android:hint="@string/last_name"
-        android:inputType="text"
+        android:inputType="textPersonName"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/sgemail"
@@ -41,13 +43,15 @@
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="22dp"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/regular"
         android:gravity="center_vertical"
+        android:inputType="text"
+        android:background="@drawable/input_field"
         android:hint="@string/enter_email"
-        android:inputType="textEmailAddress"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
 
     <EditText
         android:id="@+id/sgpassword"
@@ -55,13 +59,14 @@
         android:layout_height="31dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="22dp"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/regular"
         android:gravity="center_vertical"
+        android:background="@drawable/input_field"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/signupbtn"
@@ -82,6 +87,7 @@
         android:layout_height="50dp"
         android:src="@drawable/google_logo"
         android:layout_marginTop="110dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null" />
 
 </LinearLayout>

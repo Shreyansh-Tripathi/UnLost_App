@@ -16,7 +16,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:onClick="backPressed"
-        />
+        android:contentDescription="@null" />
 
     <TextView
         android:layout_width="match_parent"

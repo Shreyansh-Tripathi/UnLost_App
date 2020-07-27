@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1 ;
     EditText logemail, logpassword;
     TextView signuptxt;
-    private ImageView googlelogin;
+    ImageView googlelogin;
     Button loginbtn;
     private FirebaseAuth mAuth;
     static FirebaseUser user;
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 Toast.makeText(LoginActivity.this, "Logged In", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, ChooseActivity.class));
-                                LoginActivity.this.finish();
+                                finish();
                             }
                             else
                             {
@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     @Override
@@ -139,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             }
             catch (ApiException e) {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();;
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -157,17 +158,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else
                             {
+
                             Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
                             updateUI(null);
-                            LoginActivity.this.finish();
                         }
                     }
                 });
     }
 
-    private void updateUI(Object o) {
+    private void updateUI(FirebaseUser o) {
         if (o != null) {
             startActivity(new Intent(LoginActivity.this, ChooseActivity.class));
+            finish();
         }
     }
 }
