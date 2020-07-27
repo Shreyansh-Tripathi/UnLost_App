@@ -15,7 +15,6 @@
         android:background="@null"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
-        android:onClick="backPressed"
         />
 
     <TextView
@@ -90,34 +89,45 @@
         android:fontFamily="@font/noteregular"/>
 
 
-
     <Button
+        android:id="@+id/save_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/save_item"
+        android:layout_below="@+id/contact_details"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="126dp"
+        android:layout_marginEnd="110dp"
         android:background="@drawable/buttonbg"
         android:text="@string/save"
-        android:layout_marginStart="110dp"
-        android:layout_marginEnd="110dp"
-        android:layout_below="@+id/contact_details"
         android:textColor="@color/white"
-        android:layout_marginTop="40dp"
-        android:textSize="20sp"
-        />
+        android:textSize="20sp" />
 
     <ImageButton
+        android:id="@+id/add_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/add_image"
-        android:paddingEnd="10dp"
-        android:paddingBottom="8dp"
-        android:background="@drawable/button_circle"
-        android:src="@drawable/camera_white"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        tools:ignore="RtlSymmetry"
-        android:contentDescription="@null" />
+        android:layout_marginEnd="245dp"
+        android:layout_marginBottom="146dp"
+        android:background="@drawable/button_circle"
+        android:contentDescription="@null"
+        android:paddingEnd="10dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/camera_white"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="117dp"
+        android:layout_marginBottom="177dp"
+        android:text="Add an Image"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </RelativeLayout>

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +14,7 @@ import com.example.unlost.R;
 
 import java.util.ArrayList;
 
-public class Found_adapter extends RecyclerView.Adapter<Found_adapter.ViewHolder>
+public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
 {
 
 
@@ -25,7 +24,7 @@ public class Found_adapter extends RecyclerView.Adapter<Found_adapter.ViewHolder
     public interface ItemClicked{
         void onItemClicked(int index);
     }
-    public Found_adapter(Context context, ArrayList<Product> list)
+    public Lost_adapter(Context context, ArrayList<Product> list)
     {
         products=list;
         activity=(ItemClicked)context;
@@ -50,13 +49,13 @@ public class Found_adapter extends RecyclerView.Adapter<Found_adapter.ViewHolder
     }
     @NonNull
     @Override
-    public Found_adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Lost_adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Found_adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Lost_adapter.ViewHolder holder, int position) {
         holder.itemView.setTag(products.get(position));
         holder.tvCategory.setText(products.get(position).getCategory());
         holder.tvSubCategory.setText(products.get(position).getSubcategory());

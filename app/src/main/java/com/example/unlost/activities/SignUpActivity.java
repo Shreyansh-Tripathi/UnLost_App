@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -51,16 +52,18 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email=sgEmail.getText().toString();
                 String password=sgPassword.getText().toString();
-                if(TextUtils.isEmpty(email)||TextUtils.isEmpty(password))
+                String fName=sgfirstName.getText().toString();
+                String lName=sglastName.getText().toString();
+                if(TextUtils.isEmpty(email)||TextUtils.isEmpty(password)||TextUtils.isEmpty(fName))
                 {
-                    Toast.makeText(SignUpActivity.this, "enter all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Please enter name,email and password!", Toast.LENGTH_SHORT).show();
                 }
                 else if(password.length()<=6)
                 {
-                    Toast.makeText(SignUpActivity.this, "Password length must be greater than 6", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Password length must be greater than 6!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    registerUser(email, password);
+                    registerUser(email, password,fName,lName);
                 }
             }
         });
@@ -130,15 +133,30 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(String email, String password, final String fName, final String lName) {
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
                     Toast.makeText(SignUpActivity.this, "user registered succefully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
-                    finish();
+                    FirebaseUser user = auth.getCurrentUser();
+
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(fName+" "+lName).build();
+
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SignUpActivity.this, "Name added!!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignUpActivity.this,ChooseActivity.class));
+                                        finish();
+                                    }
+                                }
+                            });
+
                 }
                 else
                 {

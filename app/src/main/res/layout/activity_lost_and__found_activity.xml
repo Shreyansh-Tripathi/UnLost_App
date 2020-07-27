@@ -24,16 +24,17 @@
             tools:ignore="NestedWeights">
 
             <TextView
-                android:id="@+id/lost_title"
+                android:id="@+id/found_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="12"
+                android:clickable="true"
+                android:fontFamily="@font/regular"
                 android:gravity="center"
+                android:paddingTop="35dp"
                 android:text="@string/found"
                 android:textColor="@color/white"
-                android:fontFamily="@font/regular"
-                android:textSize="22sp"
-                android:paddingTop="35dp"/>
+                android:textSize="22sp" />
 
             <View
                 android:id="@+id/found_line"
@@ -52,16 +53,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/found_title"
+                android:id="@+id/lost_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="12"
+                android:clickable="true"
+                android:fontFamily="@font/regular"
                 android:gravity="center"
+                android:paddingTop="35dp"
                 android:text="@string/lost"
                 android:textColor="@color/white"
-                android:fontFamily="@font/regular"
-                android:textSize="22sp"
-                android:paddingTop="35dp"/>
+                android:textSize="22sp" />
 
             <View
                 android:id="@+id/lost_line"
@@ -76,11 +78,11 @@
     </LinearLayout>
 
     <fragment
+        android:id="@+id/found_frag"
+        android:name="com.example.unlost.fragments.FoundFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:id="@+id/found_frag"
-        android:name="com.example.unlost.fragments.FoundFragment"
         tools:layout="@layout/fragment_found" />
 
     <fragment

@@ -1,4 +1,4 @@
-package com.example.unlost.Fragments;
+package com.example.unlost.fragments;
 
 import android.os.Bundle;
 
