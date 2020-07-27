@@ -1,12 +1,21 @@
 package com.example.unlost.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -30,11 +39,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Lost_and_Found_activity extends AppCompatActivity {
+    private static final int REQUEST_CODE_CAMERA = 1;
+    private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
     EditText item_category,item_brand,item_brief,contact_details;
     Button save_item;
     LinearLayout add_image;
@@ -93,7 +105,6 @@ public class Lost_and_Found_activity extends AppCompatActivity {
                 else
                 {
                     openCamera();
-                    uploadImage();
                 }
             }
         });
@@ -171,6 +182,58 @@ public class Lost_and_Found_activity extends AppCompatActivity {
     }
 
     private void openCamera() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Lost_and_Found_activity.this,
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+        } else {
+            cameraIntent();
+        }
+        uploadImage();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_CODE_CAMERA && grantResults.length>0)
+        {
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                cameraIntent();
+            }
+            else
+            {
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void cameraIntent() {
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivityForResult(intent,REQUEST_CODE_CAPTURE_IMAGE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_CAPTURE_IMAGE && resultCode==RESULT_OK)
+        {
+            if(data!=null)
+            {
+                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                image_uri=getImageUri(this,capturedImage);
+            }
+        }
+    }
+
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     private String getFileExtension(Uri uri) {
