@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unlost.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>

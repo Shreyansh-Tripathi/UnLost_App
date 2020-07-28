@@ -36,6 +36,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -60,6 +63,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
     View found_line, lost_line;
     Uri image_uri;
     String url;
+    ArrayList<String> id=new ArrayList<>();
     StorageReference mStorageRef;
     FirebaseUser user;
     FirebaseFirestore db;
@@ -159,12 +163,11 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     item.put("item_category", category);
                     item.put("item_brand",brand);
                     item.put("item_brief",brief);
-                    item.put("contact_details",contact);
+                    item.put("contact_number",contact);
                     item.put("url", url);
                     assert user != null;
-                    item.put("Name",user.getDisplayName());
-                    db.collection("Lost Items")
-                            .document(category).collection(user.getUid()).add(item);
+                    item.put("contact_name",user.getDisplayName());
+                    db.collection("Lost Items").add(item);
                     Toast.makeText(Lost_and_Found_activity.this, "Item Registered!", Toast.LENGTH_SHORT).show();
                     item_brand.setText(null);
                     item_brief.setText(null);
@@ -191,7 +194,27 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 
-        db.collection("Lost Items").
+        Query dref=FirebaseFirestore.getInstance().collection("Lost Items");
+        dref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot snapshot: Objects.requireNonNull(task.getResult()))
+                    {
+                        Product product=new Product(snapshot.get("item_category").toString(),
+                                Objects.requireNonNull(snapshot.get("item_brand")).toString(),snapshot.get("url").toString());
+                        productsList.add(product);
+                        id.add(snapshot.getId());
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else
+                {
+                    Toast.makeText(Lost_and_Found_activity.this, "Error!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void uploadImage() {
@@ -291,6 +314,8 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
 
     @Override
     public void onItemClicked(int index) {
-
+        Intent intent=new Intent(Lost_and_Found_activity.this,ProductDescriptionActivity.class);
+        intent.putExtra("document_id",id.get(index));
+        startActivity(intent);
     }
 }

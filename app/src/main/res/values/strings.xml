@@ -29,5 +29,7 @@
     <string name="found">Found</string>
     <string name="lost">Lost</string>
     <string name="add_an_image">Add an Image</string>
-    <string name="enter_product_name">Enter Product Name</string>
+    <string name="item_details">Item Details</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="item_image">Item Image</string>
 </resources>
