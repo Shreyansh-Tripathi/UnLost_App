@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -41,11 +43,13 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Lost_and_Found_activity extends AppCompatActivity {
+public class Lost_and_Found_activity extends AppCompatActivity implements Lost_adapter.ItemClicked {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
     EditText item_category,item_brand,item_brief,contact_details;
@@ -60,6 +64,10 @@ public class Lost_and_Found_activity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseFirestore db;
     StorageTask mUploadTask;
+    ArrayList<Product> productsList;
+    RecyclerView recyclerView;
+    Lost_adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,7 @@ public class Lost_and_Found_activity extends AppCompatActivity {
         lost_line=findViewById(R.id.lost_line);
         add_image=findViewById(R.id.add_image);
         back_btn=findViewById(R.id.back_btn);
+        recyclerView=findViewById(R.id.recLostItems);
 
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +112,7 @@ public class Lost_and_Found_activity extends AppCompatActivity {
             public void onClick(View v) {
                 lost_line.setVisibility(View.VISIBLE);
                 found_line.setVisibility(View.INVISIBLE);
-
+                lostFragment();
             }
         });
         add_image.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +178,22 @@ public class Lost_and_Found_activity extends AppCompatActivity {
         });
     }
 
+    private void lostFragment(){
+        FragmentManager manager=this.getSupportFragmentManager();
+        manager.beginTransaction().hide(Objects.requireNonNull(manager.findFragmentById(R.id.found_frag)))
+                .show(Objects.requireNonNull(manager.findFragmentById(R.id.lost_frag))).commit();
+
+        productsList=new ArrayList<>();
+        adapter=new Lost_adapter(this, productsList);
+        layoutManager=new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+
+        db.collection("Lost Items").
+    }
+
     private void uploadImage() {
         if (image_uri==null){
             Toast.makeText(this, "No file chosen", Toast.LENGTH_SHORT).show();
@@ -183,7 +208,8 @@ public class Lost_and_Found_activity extends AppCompatActivity {
                                @Override
                                public void onSuccess(Uri uri) {
                                    url=uri.toString();
-                                   Toast.makeText(Lost_and_Found_activity.this, "Successful", Toast.LENGTH_SHORT).show();                             }
+                                   Toast.makeText(Lost_and_Found_activity.this, "Successful", Toast.LENGTH_SHORT).show();
+                               }
                            });
                        }
                    })
@@ -261,5 +287,10 @@ public class Lost_and_Found_activity extends AppCompatActivity {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    @Override
+    public void onItemClicked(int index) {
+
     }
 }

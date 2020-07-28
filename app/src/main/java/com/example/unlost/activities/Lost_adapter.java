@@ -11,13 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unlost.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
 {
-
-
     private ArrayList<Product> products;
     ItemClicked activity;
 
@@ -59,8 +58,8 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
         holder.itemView.setTag(products.get(position));
         holder.tvCategory.setText(products.get(position).getCategory());
         holder.tvSubCategory.setText(products.get(position).getSubcategory());
-        holder.ivProduct.setImageResource(R.drawable.ic_baseline_search_24);
-
+        Picasso.with((Context) activity).load(products.get(position).getUrl()).fit()
+                .resize(75,75).centerInside().into(holder.ivProduct);
     }
 
     @Override
