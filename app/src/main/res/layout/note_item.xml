@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/note_title"
             android:layout_marginStart="5dp"
+            android:paddingTop="4dp"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:fontFamily="@font/notebolditalic"/>
@@ -33,7 +34,7 @@
             android:id="@+id/note_content"
             android:textColor="@color/white"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:paddingTop="5dp"
             android:textSize="12sp"
             android:fontFamily="@font/regular"
             />

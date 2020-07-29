@@ -40,7 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:background="#0C1759"
             android:orientation="horizontal">
 
@@ -54,8 +54,8 @@
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lost Or Found Things"
-                    android:textColor="#FFFFFF"
+                    android:text="@string/lost_n_found_things"
+                    android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -63,8 +63,9 @@
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textColor="#FFFFFF"
+                    android:text="@string/found_something_or_lost_it_get_in"
+                    android:textColor="@color/white"
+                    android:paddingTop="5dp"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -72,7 +73,8 @@
                 android:id="@+id/imageView3"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
-                app:srcCompat="@drawable/search_icon" />
+                app:srcCompat="@drawable/search_icon"
+                android:contentDescription="@null" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -94,7 +96,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:background="#0C1759"
             android:orientation="horizontal">
 
@@ -108,8 +110,8 @@
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="My Reminders"
-                    android:textColor="#FFFFFF"
+                    android:text="@string/my_reminders"
+                    android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -117,8 +119,9 @@
                     android:id="@+id/textView8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textColor="#FFFFFF"
+                    android:paddingTop="5dp"
+                    android:text="@string/add_a_reminder"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
             </LinearLayout>
 

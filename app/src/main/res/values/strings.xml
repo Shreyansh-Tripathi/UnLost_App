@@ -32,4 +32,11 @@
     <string name="item_details">Item Details</string>
     <string name="contact_details">Contact Details</string>
     <string name="item_image">Item Image</string>
+    <string name="add_a_reminder">Forget things easily? Add a Reminder</string>
+    <string name="my_reminders">My Reminders</string>
+    <string name="found_something_or_lost_it_get_in">Found Something or Lost it, Get In!!</string>
+    <string name="lost_n_found_things">Lost N Found Things</string>
+    <string name="enter_location">*Enter Location</string>
+    <string name="found_at">Found At</string>
+    <string name="location">location</string>
 </resources>

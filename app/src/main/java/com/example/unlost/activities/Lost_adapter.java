@@ -57,12 +57,17 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
         holder.itemView.setTag(products.get(position));
         holder.tvCategory.setText(products.get(position).getCategory());
         holder.tvSubCategory.setText(products.get(position).getSubcategory());
-        Picasso.with((Context) activity).load(products.get(position).getUrl()).fit()
+        Picasso.with((Context) activity).load(products.get(position).getUrl())
                 .resize(75,75).centerInside().into(holder.ivProduct);
     }
 
     @Override
     public int getItemCount() {
         return products.size();
+    }
+
+    public void filterList(ArrayList<Product> filterList){
+        products=filterList;
+        notifyDataSetChanged();
     }
 }

@@ -34,6 +34,30 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
     public static final String NOTE_ID="note_Id";
     public static int UPDATENOTE_REQUEST= 3;
 
+
+    @Override
+    public void onClick(int index) {
+        Intent intent= new Intent(getApplicationContext(), EditNoteActivity.class);
+        intent.putExtra(NOTE_ID, index);
+        startActivityForResult(intent, UPDATENOTE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode== ADDNOTE_REQUEST && resultCode==RESULT_OK)
+        {
+            if (data!=null)
+                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), false);
+        }
+        else if (requestCode==UPDATENOTE_REQUEST && resultCode==RESULT_OK)
+        {
+            if (data!=null){
+                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,29 +126,6 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
              }
          }
          new GetAllNotes().execute();
-    }
-
-    @Override
-    public void onClick(int index) {
-        Intent intent= new Intent(getApplicationContext(), EditNoteActivity.class);
-        intent.putExtra(NOTE_ID, index);
-        startActivityForResult(intent, UPDATENOTE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode== ADDNOTE_REQUEST && resultCode==RESULT_OK)
-        {
-            if (data!=null)
-                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), false);
-        }
-        else if (requestCode==UPDATENOTE_REQUEST && resultCode==RESULT_OK)
-        {
-            if (data!=null){
-                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
-            }
-        }
     }
     public void backPressed(View view){
         onBackPressed();

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/grey"
     android:orientation="vertical"
     tools:context=".fragments.FoundFragment">
 
@@ -28,116 +28,155 @@
         android:textColor="@color/white"
         android:fontFamily="@font/bold"/>
 
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_category"
-        android:background="@drawable/input_field"
-        android:hint="@string/enter_item_category"
+        android:background="@color/grey"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/back_btn"
-        android:layout_marginTop="80dp"
-        android:gravity="center"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:inputType="textCapWords"
-        android:fontFamily="@font/noteregular"/>
+        >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/item_brand"
-        android:background="@drawable/input_field"
-        android:hint="@string/enter_brand_name"
-        android:layout_below="@+id/item_category"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:textColor="@color/black"
-        android:inputType="textCapWords"
-        android:textSize="18sp"
-        android:fontFamily="@font/noteregular"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/item_brief"
-        android:background="@drawable/input_field"
-        android:hint="@string/enter_item_details"
-        android:layout_below="@+id/item_brand"
-        android:layout_marginTop="50dp"
-        android:inputType="textCapSentences"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:fontFamily="@font/noteregular"
-        android:importantForAutofill="no" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/contact_details"
-        android:background="@drawable/input_field"
-        android:hint="@string/enter_contact_details"
-        android:layout_below="@+id/item_brief"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:inputType="text"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:fontFamily="@font/noteregular"/>
-
-
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/add_image"
-        android:layout_below="@+id/contact_details"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginEnd="85dp">
-
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/button_circle"
-            android:contentDescription="@null"
-            android:paddingEnd="10dp"
-            android:paddingBottom="8dp"
-            android:src="@drawable/camera_white"
-            tools:ignore="RtlSymmetry" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_an_image"
-            android:textSize="22sp"
-            android:textColor="@color/white"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/regular"/>
+            >
 
-    </LinearLayout>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_category"
+                android:background="@drawable/input_field"
+                android:hint="@string/enter_item_category"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:inputType="textCapWords"
+                android:fontFamily="@font/noteregular"
+                android:importantForAutofill="no" />
 
-    <Button
-        android:id="@+id/save_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="110dp"
-        android:background="@drawable/buttonbg"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_brand"
+                android:background="@drawable/input_field"
+                android:hint="@string/enter_brand_name"
+                android:layout_below="@+id/item_category"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:textColor="@color/black"
+                android:inputType="textCapWords"
+                android:textSize="18sp"
+                android:fontFamily="@font/noteregular"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/item_brief"
+                android:background="@drawable/input_field"
+                android:hint="@string/enter_item_details"
+                android:layout_below="@+id/item_brand"
+                android:layout_marginTop="50dp"
+                android:inputType="textCapSentences"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/noteregular"
+                android:importantForAutofill="no" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_location"
+                android:background="@drawable/input_field"
+                android:hint="@string/enter_location"
+                android:layout_below="@+id/item_brief"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/noteregular"
+                android:importantForAutofill="no"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/contact_details"
+                android:background="@drawable/input_field"
+                android:hint="@string/enter_contact_details"
+                android:layout_below="@+id/item_location"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:inputType="textCapWords"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/noteregular"/>
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_progress"
+                android:layout_below="@+id/contact_details"
+                android:visibility="gone"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/add_image"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/contact_details"
+                android:layout_marginStart="85dp"
+                android:layout_marginEnd="85dp">
+
+                <ImageButton
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_circle"
+                    android:contentDescription="@null"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp"
+                    android:src="@drawable/camera_white"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_an_image"
+                    android:textSize="22sp"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/regular"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/save_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="110dp"
+                android:background="@drawable/buttonbg"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

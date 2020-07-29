@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 @Entity(tableName = "notes")
 public class Note implements Serializable {
@@ -18,6 +18,7 @@ public class Note implements Serializable {
 
     @ColumnInfo(name="description")
     private String description;
+
     @ColumnInfo(name = "image_path1")
     private String imagePath1;
 
@@ -74,8 +75,5 @@ public class Note implements Serializable {
         this.imagePath3 = imagePath3;
     }
 
-    @Override
-    public String toString() {
-        return title;
-    }
+
 }

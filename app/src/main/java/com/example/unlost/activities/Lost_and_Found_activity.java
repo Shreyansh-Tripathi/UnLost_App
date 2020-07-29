@@ -18,13 +18,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,14 +51,14 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 import java.util.Objects;
 
 public class Lost_and_Found_activity extends AppCompatActivity implements Lost_adapter.ItemClicked {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
-    EditText item_category,item_brand,item_brief,contact_details;
+    EditText item_category,item_brand,item_brief,contact_details,search_product,item_location;
     Button save_item;
     ImageButton back_btn;
     LinearLayout add_image;
@@ -72,6 +75,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
     RecyclerView recyclerView;
     Lost_adapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    ProgressBar image_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +84,16 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         item_category=findViewById(R.id.item_category);
         item_brand=findViewById(R.id.item_brand);
         item_brief=findViewById(R.id.item_brief);
+        item_location=findViewById(R.id.item_location);
         contact_details=findViewById(R.id.contact_details);
+        search_product=findViewById(R.id.search_product);
         save_item=findViewById(R.id.save_item);
         found_title=findViewById(R.id.found_title);
         lost_title=findViewById(R.id.lost_title);
         found_line=findViewById(R.id.found_line);
         lost_line=findViewById(R.id.lost_line);
         add_image=findViewById(R.id.add_image);
+        image_progress=findViewById(R.id.image_progress);
         back_btn=findViewById(R.id.back_btn);
         recyclerView=findViewById(R.id.recLostItems);
 
@@ -131,6 +138,36 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                 }
             }
         });
+
+        search_product.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                   filterItems(s.toString());
+            }
+        });
+    }
+
+    private void filterItems(String search){
+        ArrayList<Product> searchList= new ArrayList<>();
+
+        for (Product item : productsList){
+            if (item.getCategory().toLowerCase().contains(search.toLowerCase()) ||
+                    item.getSubcategory().toLowerCase().contains(search.toLowerCase()))
+            {
+                searchList.add(item);
+            }
+        }
+        adapter.filterList(searchList);
     }
 
     private void foundFragment() {
@@ -148,9 +185,10 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                 String category=item_category.getText().toString();
                 String brand=item_brand.getText().toString();
                 String brief=item_brief.getText().toString();
+                String location=item_location.getText().toString().trim();
                 String contact=contact_details.getText().toString();
 
-                if(TextUtils.isEmpty(category)||TextUtils.isEmpty(brief)||TextUtils.isEmpty(contact))
+                if(TextUtils.isEmpty(category)||TextUtils.isEmpty(brief)||TextUtils.isEmpty(contact)||TextUtils.isEmpty(location))
                 {
                     Toast.makeText(Lost_and_Found_activity.this, "Please enter all fields marked with *", Toast.LENGTH_SHORT).show();
                 }
@@ -163,6 +201,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     item.put("item_category", category);
                     item.put("item_brand",brand);
                     item.put("item_brief",brief);
+                    item.put("item_location",location);
                     item.put("contact_number",contact);
                     item.put("url", url);
                     assert user != null;
@@ -231,6 +270,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                                @Override
                                public void onSuccess(Uri uri) {
                                    url=uri.toString();
+                                   image_progress.setVisibility(View.GONE);
                                    Toast.makeText(Lost_and_Found_activity.this, "Successful", Toast.LENGTH_SHORT).show();
                                }
                            });
@@ -240,12 +280,13 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(Lost_and_Found_activity.this, "Error:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        image_progress.setVisibility(View.GONE);
                     }
                 })
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(Lost_and_Found_activity.this, "Uploading", Toast.LENGTH_SHORT).show();
+                        image_progress.setVisibility(View.VISIBLE);
                     }
                 });
         }

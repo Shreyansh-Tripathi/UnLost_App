@@ -69,7 +69,7 @@
             android:hint="@string/description"
             android:gravity="start|top"
             android:background="@null"
-            android:inputType="textCapSentences"
+            android:inputType="textImeMultiLine"
             android:autofillHints="no"
             />
     </ScrollView>

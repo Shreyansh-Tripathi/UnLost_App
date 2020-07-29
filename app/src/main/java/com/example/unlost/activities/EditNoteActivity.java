@@ -41,6 +41,7 @@ import com.example.unlost.entities.Note;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 import static com.example.unlost.notification.NotificationChannel.channelId;
 
@@ -48,13 +49,13 @@ public class EditNoteActivity extends AppCompatActivity {
 
     EditText editnoteTitle, editnoteContent;
     ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn;
-    CountDownTimer reminder;
+    static CountDownTimer reminder;
     NotificationManagerCompat manager;
     final static int RQ_CODE=1;
     final static int notifyId=2;
     public static final String EDIT_NOTE_ID="edit_note_id";
     public static final String DELETE_NOTE="deleteNote";
-    boolean activetimer=false;
+    static boolean activetimer;
     private static final int REQUEST_CODE_STORAGE_PERMISSION=3;
     private static final int REQUEST_CODE_CAMERA=5;
     private static final int REQUEST_CODE_SELECT_IMAGE=4;
@@ -91,6 +92,13 @@ public class EditNoteActivity extends AppCompatActivity {
                 iManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
+
+        if (!activetimer){
+            reminderBtn.setImageResource(R.drawable.reminder_off);
+        }
+        else {
+            reminderBtn.setImageResource(R.drawable.reminder_on);
+        }
 
         Intent intent= getIntent();
         id=intent.getIntExtra(AllNotesActivity.NOTE_ID, -1);
@@ -210,6 +218,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 else {
                     reminderBtn.setImageResource(R.drawable.reminder_off);
                     reminder.cancel();
+                    Toast.makeText(EditNoteActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
                     notifyReminderFinished(v);
                     activetimer=false;
                 }
@@ -275,7 +284,6 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
 
         if (editnoteTitle.getText().toString().trim().isEmpty() && editnoteContent.getText().toString().trim().isEmpty())
         {
@@ -287,6 +295,7 @@ public class EditNoteActivity extends AppCompatActivity {
         else{
             saveNote(id);
         }
+        super.onBackPressed();
     }
 
     private void deleteNote(final int note_id)
@@ -318,7 +327,7 @@ public class EditNoteActivity extends AppCompatActivity {
     {
         final Note note = AllNotesActivity.AllNotes.get(noteId);
         note.setTitle(editnoteTitle.getText().toString().trim());
-        note.setDescription(editnoteContent.getText().toString().trim());
+        note.setDescription(editnoteContent.getText().toString());
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
@@ -347,7 +356,7 @@ public class EditNoteActivity extends AppCompatActivity {
         if (requestCode==RQ_CODE && resultCode==RESULT_OK)
         {
             if (data != null){
-                reminderBtn.setImageResource(R.drawable.reminder_on);
+
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
@@ -370,7 +379,8 @@ public class EditNoteActivity extends AppCompatActivity {
         {
             if(data!=null)
             {
-                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                Bitmap capturedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+                assert capturedImage != null;
                 Uri capturedImageUri=getImageUri(this,capturedImage);
                 processImage(capturedImageUri);
             }
@@ -453,8 +463,8 @@ public class EditNoteActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                notifyReminderFinished(v);
                 reminderBtn.setImageResource(R.drawable.reminder_off);
+                notifyReminderFinished(v);
                 reminder.cancel();
                 activetimer=false;
                 Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
