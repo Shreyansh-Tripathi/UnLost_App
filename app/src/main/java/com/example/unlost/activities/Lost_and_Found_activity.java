@@ -212,9 +212,10 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     item_brief.setText(null);
                     item_category.setText(null);
                     contact_details.setText(null);
+                    item_location.setText(null);
                     image_uri=null;
                     url=null;
-
+                    mUploadTask=null;
                 }
             }
         });
