@@ -18,7 +18,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     ItemClick activity;
 
     public interface ItemClick{
-        void onClick(int index);
+        void onClick(Note note, int index);
     }
 
     public NotesAdapter(ArrayList<Note> notesList, Context context) {
@@ -38,7 +38,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.onClick(notesList.indexOf((Note)v.getTag()));
+                    activity.onClick(notesList.get(notesList.indexOf((Note)v.getTag())),notesList.indexOf((Note)v.getTag()));
                 }
             });
         }

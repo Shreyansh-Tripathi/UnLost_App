@@ -31,32 +31,8 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
     TextView noteTitle, noteContent;
     public static final int ADDNOTE_REQUEST=2;
     public static final int GETALLNOTES=1;
-    public static final String NOTE_ID="note_Id";
     public static int UPDATENOTE_REQUEST= 3;
-
-
-    @Override
-    public void onClick(int index) {
-        Intent intent= new Intent(getApplicationContext(), EditNoteActivity.class);
-        intent.putExtra(NOTE_ID, index);
-        startActivityForResult(intent, UPDATENOTE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode== ADDNOTE_REQUEST && resultCode==RESULT_OK)
-        {
-            if (data!=null)
-                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), false);
-        }
-        else if (requestCode==UPDATENOTE_REQUEST && resultCode==RESULT_OK)
-        {
-            if (data!=null){
-                getAllNotes(data.getIntExtra(EditNoteActivity.EDIT_NOTE_ID, -1), data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
-            }
-        }
-    }
+    private int noteClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +47,15 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
 
         notesAdapter= new NotesAdapter(AllNotes, this);
         layoutManager=new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
-        recNotes.setLayoutManager(layoutManager);
         recNotes.setAdapter(notesAdapter);
+        recNotes.setLayoutManager(layoutManager);
 
         getAllNotes(GETALLNOTES, false);
 
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent=new Intent(AllNotesActivity.this, EditNoteActivity.class);
-              intent.putExtra(NOTE_ID, -1);
+              Intent intent=new Intent(getApplicationContext(), EditNoteActivity.class);
               startActivityForResult(intent, ADDNOTE_REQUEST);
             }
         });
@@ -105,27 +80,50 @@ public class AllNotesActivity extends AppCompatActivity implements NotesAdapter.
                      notesAdapter.notifyDataSetChanged();
 
                  }
-                 else if (request_code == AllNotes.size()-1)
+                 else if (request_code == ADDNOTE_REQUEST)
                  {
-                     AllNotes.add(request_code, notes.get(request_code));
-                     notesAdapter.notifyItemInserted(request_code);
-                     
+                     AllNotes.add(0, notes.get(0));
+                     notesAdapter.notifyItemInserted(0);
                  }
-                 else
+                 else if (request_code == UPDATENOTE_REQUEST)
                  {
-                     AllNotes.remove(request_code);
+                     AllNotes.remove(noteClicked);
                      if (isNoteDeleted)
                      {
-                         notesAdapter.notifyItemRemoved(request_code);
+                         notesAdapter.notifyItemRemoved(noteClicked);
                      }
-                     else if (request_code != -1){
-                         AllNotes.add(request_code, notes.get(request_code));
-                         notesAdapter.notifyItemChanged(request_code);
+                     else {
+                         AllNotes.add(noteClicked, notes.get(noteClicked));
+                         notesAdapter.notifyItemChanged(noteClicked);
                      }
                  }
+                 recNotes.smoothScrollToPosition(0);
              }
          }
          new GetAllNotes().execute();
+    }
+
+    @Override
+    public void onClick(Note note, int index) {
+        noteClicked=index;
+        Intent intent= new Intent(getApplicationContext(), EditNoteActivity.class);
+        intent.putExtra("note", note);
+        intent.putExtra("updateOrViewNote", true);
+        startActivityForResult(intent, UPDATENOTE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode== ADDNOTE_REQUEST && resultCode==RESULT_OK)
+        {
+                getAllNotes(ADDNOTE_REQUEST, false);
+        }
+        else if (requestCode==UPDATENOTE_REQUEST && resultCode==RESULT_OK)
+        {
+            assert data != null;
+            getAllNotes(UPDATENOTE_REQUEST, data.getBooleanExtra(EditNoteActivity.DELETE_NOTE, false));
+        }
     }
     public void backPressed(View view){
         onBackPressed();

@@ -48,12 +48,11 @@ import static com.example.unlost.notification.NotificationChannel.channelId;
 public class EditNoteActivity extends AppCompatActivity {
 
     EditText editnoteTitle, editnoteContent;
-    ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn;
+    ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn,saveNotebtn;
     static CountDownTimer reminder;
     NotificationManagerCompat manager;
     final static int RQ_CODE=1;
     final static int notifyId=2;
-    public static final String EDIT_NOTE_ID="edit_note_id";
     public static final String DELETE_NOTE="deleteNote";
     static boolean activetimer;
     private static final int REQUEST_CODE_STORAGE_PERMISSION=3;
@@ -63,7 +62,7 @@ public class EditNoteActivity extends AppCompatActivity {
     String selectedImagePath1="",selectedImagePath2="",selectedImagePath3="";
     ImageView imgShow1,imgShow2,imgShow3;
     LinearLayout imgLayout;
-    int id=500;
+    private Note availableNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +74,7 @@ public class EditNoteActivity extends AppCompatActivity {
         goBackbtn=findViewById(R.id.notebackbtn);
         galleryBtn=findViewById(R.id.gallerybtn);
         reminderBtn=findViewById(R.id.reminderbtn);
+        saveNotebtn=findViewById(R.id.saveNote);
         deletebtn=findViewById(R.id.deleteNotebtn);
         imgShow1=findViewById(R.id.imgShow1);
         imgShow2=findViewById(R.id.imgShow2);
@@ -100,38 +100,10 @@ public class EditNoteActivity extends AppCompatActivity {
             reminderBtn.setImageResource(R.drawable.reminder_on);
         }
 
-        Intent intent= getIntent();
-        id=intent.getIntExtra(AllNotesActivity.NOTE_ID, -1);
-
-        if (id != -1){
-            editnoteTitle.setText(AllNotesActivity.AllNotes.get(id).getTitle());
-            editnoteContent.setText(AllNotesActivity.AllNotes.get(id).getDescription());
-            final Note note = AllNotesActivity.AllNotes.get(id);
-            if(note.getImagePath1() != null)
-            {
-                imgLayout.setVisibility(View.VISIBLE);
-                imgShow1.setVisibility(View.VISIBLE);
-                imgShow1.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath1()));
-                if(note.getImagePath2()!=null)
-                {
-                    imgShow2.setVisibility(View.VISIBLE);
-                    imgShow2.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath2()));
-                    if(note.getImagePath3()!=null)
-                    {
-                        imgShow3.setVisibility(View.VISIBLE);
-                        imgShow3.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath3()));
-                    }
-                }
-            }
-
-        }
-
-        else {
-            Note newNote= new Note();
-            newNote.setDescription("");
-            newNote.setTitle("");
-            AllNotesActivity.AllNotes.add(newNote);
-            id= AllNotesActivity.AllNotes.size()-1;
+        if (getIntent().getBooleanExtra("updateOrViewNote", false))
+        {
+            availableNote=(Note)getIntent().getSerializableExtra("note");
+            setNote();
         }
 
         if (TextUtils.isEmpty(editnoteContent.getText().toString().trim()) && TextUtils.isEmpty(editnoteTitle.getText().toString().trim()))
@@ -183,7 +155,7 @@ public class EditNoteActivity extends AppCompatActivity {
         imgShow1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Note note = AllNotesActivity.AllNotes.get(id);
+                final Note note =availableNote;
                 Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
                 intent.putExtra("imagePath",note.getImagePath1());
                 startActivity(intent);
@@ -192,7 +164,7 @@ public class EditNoteActivity extends AppCompatActivity {
         imgShow2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Note note = AllNotesActivity.AllNotes.get(id);
+                final Note note =availableNote;
                 Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
                 intent.putExtra("imagePath",note.getImagePath2());
                 startActivity(intent);
@@ -201,7 +173,7 @@ public class EditNoteActivity extends AppCompatActivity {
         imgShow3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Note note = AllNotesActivity.AllNotes.get(id);
+                final Note note = availableNote;
                 Intent intent=new Intent(EditNoteActivity.this,ShowImage.class);
                 intent.putExtra("imagePath",note.getImagePath3());
                 startActivity(intent);
@@ -225,6 +197,17 @@ public class EditNoteActivity extends AppCompatActivity {
             }
         });
 
+        saveNotebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(editnoteTitle.getText().toString()) || TextUtils.isEmpty(editnoteContent.getText().toString())) {
+                    Toast.makeText(EditNoteActivity.this, "Both Fields Can't Be Empty!", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveNote();
+                }
+            }
+        });
+
         deletebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,13 +216,53 @@ public class EditNoteActivity extends AppCompatActivity {
                         .setPositiveButton("Yes, Delete!", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                deleteNote(id);
+                                @SuppressLint("StaticFieldLeak")
+                                class DeleteNoteTask extends AsyncTask<Void, Void, Void>
+                                {
+                                    @Override
+                                    protected Void doInBackground(Void... voids) {
+                                        NotesDataBase.getDatabase(getApplicationContext()).getNoteDao().deleteNote(availableNote);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void aVoid) {
+                                        super.onPostExecute(aVoid);
+                                        Intent intent=new Intent();
+                                        intent.putExtra(DELETE_NOTE, true);
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    }
+                                }
+                                new DeleteNoteTask().execute();
                             }
                         })
                         .setNegativeButton("No", null).show();
             }
         });
     }
+
+    private void setNote() {
+        editnoteTitle.setText(availableNote.getTitle());
+        editnoteContent.setText(availableNote.getDescription());
+        if(availableNote.getImagePath1() != null)
+        {
+            imgLayout.setVisibility(View.VISIBLE);
+            imgShow1.setVisibility(View.VISIBLE);
+            imgShow1.setImageBitmap(BitmapFactory.decodeFile(availableNote.getImagePath1()));
+            if(availableNote.getImagePath2()!=null)
+            {
+                imgShow2.setVisibility(View.VISIBLE);
+                imgShow2.setImageBitmap(BitmapFactory.decodeFile(availableNote.getImagePath2()));
+                if(availableNote.getImagePath3()!=null)
+                {
+                    imgShow3.setVisibility(View.VISIBLE);
+                    imgShow3.setImageBitmap(BitmapFactory.decodeFile(availableNote.getImagePath3()));
+                }
+            }
+        }
+    }
+
     private void openCamera() {
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager())!=null)
@@ -282,52 +305,15 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-
-        if (editnoteTitle.getText().toString().trim().isEmpty() && editnoteContent.getText().toString().trim().isEmpty())
-        {
-            Toast.makeText(this, "Not Saved!", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-
-        else{
-            saveNote(id);
-        }
-        super.onBackPressed();
-    }
-
-    private void deleteNote(final int note_id)
+    private void saveNote()
     {
-        @SuppressLint("StaticFieldLeak")
-        class DeleteNoteTask extends AsyncTask<Void, Void, Void>
-        {
-            final Note note= AllNotesActivity.AllNotes.get(note_id);
-            @Override
-            protected Void doInBackground(Void... voids) {
-                NotesDataBase.getDatabase(getApplicationContext()).getNoteDao().deleteNote(note);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Intent intent=getIntent();
-                intent.putExtra(EDIT_NOTE_ID, note_id);
-                intent.putExtra(DELETE_NOTE, true);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        }
-        new DeleteNoteTask().execute();
-    }
-
-    private void saveNote(final int noteId)
-    {
-        final Note note = AllNotesActivity.AllNotes.get(noteId);
-        note.setTitle(editnoteTitle.getText().toString().trim());
+        final Note note = new Note();
+        note.setTitle(editnoteTitle.getText().toString());
         note.setDescription(editnoteContent.getText().toString());
+
+        if (availableNote!=null){
+            note.setId(availableNote.getId());
+        }
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
@@ -340,8 +326,7 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Intent intent=getIntent();
-                intent.putExtra(EDIT_NOTE_ID, noteId);
+                Intent intent=new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -394,7 +379,7 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     private void processImage(Uri imageUri) {
-        final Note note = AllNotesActivity.AllNotes.get(id);
+        final Note note = availableNote;
         if (imageUri!=null)
         {
             try{
@@ -422,8 +407,6 @@ public class EditNoteActivity extends AppCompatActivity {
                     selectedImagePath3=getPathFromUri(imageUri);
                     note.setImagePath3(selectedImagePath3);
                 }
-
-
             }
             catch (Exception e)
             {

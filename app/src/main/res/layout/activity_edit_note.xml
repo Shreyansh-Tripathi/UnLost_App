@@ -101,11 +101,11 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        >
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -120,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/gallerybtn"
+            android:layout_toEndOf="@+id/camerabtn"
             android:layout_marginStart="15dp"
             android:background="@color/white"
             android:src="@drawable/insert_photo"
@@ -129,10 +130,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/reminderbtn"
+            android:layout_toEndOf="@+id/gallerybtn"
             android:src="@drawable/reminder_off"
             android:background="@color/white"
             android:layout_marginStart="15dp"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:id="@+id/saveNote"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="150dp"
+            android:src="@drawable/savenote"
+            android:background="@color/white"
+            tools:ignore="ContentDescription"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
