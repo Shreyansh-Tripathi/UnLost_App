@@ -129,8 +129,8 @@
                 android:id="@+id/imageView9"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
-                app:srcCompat="@drawable/email"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/brain" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

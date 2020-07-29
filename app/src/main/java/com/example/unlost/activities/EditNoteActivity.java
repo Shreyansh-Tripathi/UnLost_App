@@ -313,7 +313,7 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Intent intent=new Intent();
+                Intent intent=getIntent();
                 intent.putExtra(EDIT_NOTE_ID, note_id);
                 intent.putExtra(DELETE_NOTE, true);
                 setResult(RESULT_OK, intent);
@@ -340,7 +340,7 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Intent intent=new Intent();
+                Intent intent=getIntent();
                 intent.putExtra(EDIT_NOTE_ID, noteId);
                 setResult(RESULT_OK, intent);
                 finish();
