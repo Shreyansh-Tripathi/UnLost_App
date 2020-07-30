@@ -17,17 +17,6 @@
         android:layout_marginTop="15dp"
         android:contentDescription="@null" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/enter_details"
-        android:textSize="22sp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="35dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/bold"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,20 +31,20 @@
             >
 
             <EditText
+                android:id="@+id/item_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_category"
-                android:background="@drawable/input_field"
-                android:hint="@string/enter_item_category"
-                android:layout_marginTop="60dp"
-                android:gravity="center"
                 android:layout_marginStart="50dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginEnd="50dp"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:inputType="textCapWords"
+                android:background="@drawable/input_field"
                 android:fontFamily="@font/noteregular"
-                android:importantForAutofill="no" />
+                android:gravity="center"
+                android:hint="@string/enter_item_category"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -176,8 +165,33 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="35dp"
+                android:fontFamily="@font/bold"
+                android:gravity="center"
+                android:text="@string/enter_details"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
+
         </RelativeLayout>
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/btnUploads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="My uploads"
+        android:textColor="@color/text_blue" />
 
 </RelativeLayout>

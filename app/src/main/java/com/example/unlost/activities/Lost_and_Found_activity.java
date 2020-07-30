@@ -59,7 +59,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
     EditText item_category,item_brand,item_brief,contact_details,search_product,item_location;
-    Button save_item;
+    Button save_item,btnUploads;
     ImageButton back_btn;
     LinearLayout add_image;
     TextView found_title,lost_title;
@@ -96,6 +96,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         image_progress=findViewById(R.id.image_progress);
         back_btn=findViewById(R.id.back_btn);
         recyclerView=findViewById(R.id.recLostItems);
+        btnUploads=findViewById(R.id.btnUploads);
 
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +199,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
 
                 else
                 {
+                    item.put("user_id",user.getUid());
                     item.put("item_category", category);
                     item.put("item_brand",brand);
                     item.put("item_brief",brief);
@@ -217,6 +219,12 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     url=null;
                     mUploadTask=null;
                 }
+            }
+        });
+        btnUploads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Lost_and_Found_activity.this,MyUploads.class));
             }
         });
     }
