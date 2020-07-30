@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".activities.ProductDescriptionActivity"/>
+        <activity android:name=".activities.SplashScreenActivity"></activity>
+        <activity android:name=".activities.ProductDescriptionActivity" />
         <activity android:name=".activities.ShowImage" />
         <activity
             android:name=".activities.ReminderActivity"
