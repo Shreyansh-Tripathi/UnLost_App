@@ -139,7 +139,7 @@ public class EditNoteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(imgShow3.getDrawable()!=null)
                 {
-                    Toast.makeText(EditNoteActivity.this, "you cannot store more than 3 images!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditNoteActivity.this, "You Cannot Store More than THREE Images!", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if (ContextCompat.checkSelfPermission(getApplicationContext(),

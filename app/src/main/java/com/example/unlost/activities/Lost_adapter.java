@@ -18,14 +18,21 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
 {
     private ArrayList<Product> products;
     ItemClicked activity;
+    LongItemClicked activity2;
 
     public interface ItemClicked{
         void onItemClicked(int index);
     }
+
+    public interface LongItemClicked{
+         void onLongItemClicked(int index, View view);
+    }
+
     public Lost_adapter(Context context, ArrayList<Product> list)
     {
         products=list;
         activity=(ItemClicked)context;
+        activity2=(LongItemClicked)context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -41,6 +48,13 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     activity.onItemClicked(products.indexOf((Product) v.getTag()));
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                      activity2.onLongItemClicked(products.indexOf((Product) v.getTag()), v);
+                    return true;
                 }
             });
         }

@@ -39,4 +39,6 @@
     <string name="enter_location">*Enter Location</string>
     <string name="found_at">Found At</string>
     <string name="location">location</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

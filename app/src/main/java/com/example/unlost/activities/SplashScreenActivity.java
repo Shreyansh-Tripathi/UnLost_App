@@ -10,7 +10,6 @@ import android.widget.ProgressBar;
 import com.example.unlost.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
 
     ProgressBar splashscreenProgressBar;
     @Override
@@ -18,6 +17,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         splashscreenProgressBar=findViewById(R.id.splashscreenprogress);
+        int SPLASH_DISPLAY_LENGTH = 3000;
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
