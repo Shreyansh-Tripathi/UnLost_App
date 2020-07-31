@@ -17,9 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
+        <activity android:name=".activities.EditProductActivity"></activity>
         <activity android:name=".activities.MyUploads" />
         <activity android:name=".activities.ProductDescriptionActivity" />
-        <activity android:name=".activities.SplashScreenActivity" >
+        <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +42,7 @@
         <activity android:name=".activities.Lost_and_Found_activity" />
         <activity android:name=".activities.ChooseActivity" />
         <activity android:name=".activities.SignUpActivity" />
-        <activity android:name=".activities.LoginActivity"/>
+        <activity android:name=".activities.LoginActivity" />
     </application>
 
 </manifest>

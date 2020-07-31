@@ -8,10 +8,24 @@
     android:background="@drawable/splashscreen"
     tools:context=".activities.SplashScreenActivity">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="132dp"
+        android:background="@null"
+        android:elevation="5dp"
+        android:contentDescription="@null"
+        android:src="@drawable/logo_app"
+        app:layout_constraintBottom_toTopOf="@+id/splashscreenprogress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ProgressBar
         android:id="@+id/splashscreenprogress"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="120dp"
         android:indeterminate="true"

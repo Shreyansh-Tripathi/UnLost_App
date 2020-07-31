@@ -48,7 +48,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
-            android:text="category"
+            android:text="@string/category"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -62,7 +62,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
-            android:text="brand"
+            android:text="@string/brand"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -79,7 +79,7 @@
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
-            android:text="brief"
+            android:text="@string/brief"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -111,7 +111,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
-            android:text="contact name"
+            android:text="@string/contact_details"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -125,7 +125,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
-            android:text="contact number"
+            android:text="@string/contact"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />

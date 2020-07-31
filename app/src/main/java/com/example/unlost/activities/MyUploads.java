@@ -153,7 +153,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
                 return true;
 
             case R.id.editproduct:
-                Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MyUploads.this, EditProductActivity.class));
                 return true;
 
             default:
