@@ -59,10 +59,10 @@ public class EditNoteActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CAMERA=5;
     private static final int REQUEST_CODE_SELECT_IMAGE=4;
     private static final int REQUEST_CODE_CAPTURE_IMAGE=6;
-    String selectedImagePath1="",selectedImagePath2="",selectedImagePath3="";
+    private static String selectedImagePath1="",selectedImagePath2="",selectedImagePath3="";
     ImageView imgShow1,imgShow2,imgShow3;
     LinearLayout imgLayout;
-    private Note availableNote;
+    private Note availableNote,newNote=new Note();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,19 +307,30 @@ public class EditNoteActivity extends AppCompatActivity {
 
     private void saveNote()
     {
-        final Note note = new Note();
-        note.setTitle(editnoteTitle.getText().toString());
-        note.setDescription(editnoteContent.getText().toString());
+        newNote.setTitle(editnoteTitle.getText().toString());
+        newNote.setDescription(editnoteContent.getText().toString());
+        if(imgShow1.getDrawable()!=null)
+        {
+            newNote.setImagePath1(selectedImagePath1);
+            if(imgShow2.getDrawable()!=null)
+            {
+                newNote.setImagePath2(selectedImagePath2);
+                if(imgShow3.getDrawable()!=null)
+                {
+                    newNote.setImagePath3(selectedImagePath3);
+                }
+            }
+        }
 
         if (availableNote!=null){
-            note.setId(availableNote.getId());
+            newNote.setId(availableNote.getId());
         }
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
             @Override
             protected Void doInBackground(Void... voids) {
-                NotesDataBase.getDatabase(getApplicationContext()).getNoteDao().insertNote(note);
+                NotesDataBase.getDatabase(getApplicationContext()).getNoteDao().insertNote(newNote);
                 return null;
             }
 
@@ -364,8 +375,7 @@ public class EditNoteActivity extends AppCompatActivity {
         {
             if(data!=null)
             {
-                Bitmap capturedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-                assert capturedImage != null;
+                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
                 Uri capturedImageUri=getImageUri(this,capturedImage);
                 processImage(capturedImageUri);
             }
@@ -379,7 +389,6 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     private void processImage(Uri imageUri) {
-        final Note note = availableNote;
         if (imageUri!=null)
         {
             try{
@@ -391,21 +400,18 @@ public class EditNoteActivity extends AppCompatActivity {
                     imgShow1.setVisibility(View.VISIBLE);
                     imgShow1.setImageBitmap(bitmap);
                     selectedImagePath1=getPathFromUri(imageUri);
-                    note.setImagePath1(selectedImagePath1);
                 }
                 else if(imgShow2.getDrawable()==null)
                 {
                     imgShow2.setVisibility(View.VISIBLE);
                     imgShow2.setImageBitmap(bitmap);
                     selectedImagePath2=getPathFromUri(imageUri);
-                    note.setImagePath2(selectedImagePath2);
                 }
                 else if(imgShow3.getDrawable()==null)
                 {
                     imgShow3.setVisibility(View.VISIBLE);
                     imgShow3.setImageBitmap(bitmap);
                     selectedImagePath3=getPathFromUri(imageUri);
-                    note.setImagePath3(selectedImagePath3);
                 }
             }
             catch (Exception e)

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UnLost</string>
+    <string name="app_name">Find it</string>
     <string name="welcome">Welcome!</string>
     <string name="enter_email">Enter Email</string>
     <string name="login">LOGIN</string>
