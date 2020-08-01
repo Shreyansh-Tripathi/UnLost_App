@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 public class ProductDescriptionActivity extends AppCompatActivity {
     TextView tvItemCategory,tvItemBrand,tvItemBrief,tvContactName,tvContactNumber,tvlocation;
     ImageView ivLostImage;
@@ -48,13 +50,14 @@ public class ProductDescriptionActivity extends AppCompatActivity {
                 if(task.isSuccessful())
                 {
                     DocumentSnapshot doc=task.getResult();
-                    tvItemCategory.setText(doc.get("item_category").toString());
-                    tvItemBrand.setText(doc.get("item_brand").toString());
-                    tvItemBrief.setText(doc.get("item_brief").toString());
-                    tvContactName.setText(doc.get("contact_name").toString());
-                    tvContactNumber.setText(doc.get("contact_number").toString());
-                    tvlocation.setText(doc.get("item_location").toString());
-                    Picasso.with(ProductDescriptionActivity.this).load(doc.get("url").toString()).fit().centerInside()
+                    assert doc != null;
+                    tvItemCategory.setText(Objects.requireNonNull(doc.get("item_category")).toString());
+                    tvItemBrand.setText(Objects.requireNonNull(doc.get("item_brand")).toString());
+                    tvItemBrief.setText(Objects.requireNonNull(doc.get("item_brief")).toString());
+                    tvContactName.setText(Objects.requireNonNull(doc.get("contact_name")).toString());
+                    tvContactNumber.setText(Objects.requireNonNull(doc.get("contact_number")).toString());
+                    tvlocation.setText(Objects.requireNonNull(doc.get("item_location")).toString());
+                    Picasso.with(ProductDescriptionActivity.this).load(Objects.requireNonNull(doc.get("url")).toString()).fit().centerInside()
                             .into(ivLostImage);
                         progress_bar.setVisibility(View.GONE);
                 }

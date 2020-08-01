@@ -41,7 +41,7 @@
                 android:id="@+id/found_line"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:background="@color/white"
                  />
 
@@ -71,7 +71,7 @@
                 android:id="@+id/lost_line"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:visibility="invisible"
                 android:background="@color/white"
                 />

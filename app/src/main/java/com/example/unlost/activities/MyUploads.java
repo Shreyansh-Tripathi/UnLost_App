@@ -1,6 +1,7 @@
 package com.example.unlost.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +43,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> id=new ArrayList<>();
     int position=-1;
+    final static int RQ_CODE=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,30 +70,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        Query dref= FirebaseFirestore.getInstance().collection("Lost Items")
-                .whereEqualTo("user_id",user.getUid());
-        dref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    for(QueryDocumentSnapshot snapshot: Objects.requireNonNull(task.getResult()))
-                    {
-                        Product product=new Product(Objects.requireNonNull(snapshot.get("item_category")).toString(),
-                                Objects.requireNonNull(snapshot.get("item_brand")).toString(), Objects.requireNonNull(snapshot.get("url")).toString());
-                        productsList.add(product);
-                        id.add(snapshot.getId());
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-                else
-                {
-                    Toast.makeText(MyUploads.this, "Error!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        showAllProducts();
     }
     private void filterItems(String search){
         ArrayList<Product> searchList= new ArrayList<>();
@@ -153,11 +132,50 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
                 return true;
 
             case R.id.editproduct:
-                startActivity(new Intent(MyUploads.this, EditProductActivity.class));
+                Intent intent=new Intent(MyUploads.this, EditProductActivity.class);
+                intent.putExtra("product_id",id.get(position));
+                startActivityForResult(intent, RQ_CODE);
                 return true;
 
             default:
             return false;
+        }
+    }
+
+    private void showAllProducts(){
+
+        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        Query dref= FirebaseFirestore.getInstance().collection("Lost Items")
+                .whereEqualTo("user_id",user.getUid());
+        dref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot snapshot: Objects.requireNonNull(task.getResult()))
+                    {
+                        Product product=new Product(Objects.requireNonNull(snapshot.get("item_category")).toString(),
+                                Objects.requireNonNull(snapshot.get("item_brand")).toString(), Objects.requireNonNull(snapshot.get("url")).toString());
+                        productsList.add(product);
+                        id.add(snapshot.getId());
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                else
+                {
+                    Toast.makeText(MyUploads.this, "Error!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==RQ_CODE && resultCode==RESULT_OK){
+            adapter.notifyItemChanged(position);
+            showAllProducts();
         }
     }
 }

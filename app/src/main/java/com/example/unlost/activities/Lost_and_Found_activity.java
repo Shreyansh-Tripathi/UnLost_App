@@ -177,7 +177,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         manager.beginTransaction().hide(Objects.requireNonNull(manager.findFragmentById(R.id.lost_frag)))
                 .show(Objects.requireNonNull(manager.findFragmentById(R.id.found_frag))).commit();
 
-          final Map<String, Object> item= new HashMap<>();
+        final Map<String, Object> item= new HashMap<>();
 
         save_item.setOnClickListener(new View.OnClickListener() {
             @Override

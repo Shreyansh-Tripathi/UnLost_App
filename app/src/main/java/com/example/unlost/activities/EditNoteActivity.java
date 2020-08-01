@@ -204,6 +204,9 @@ public class EditNoteActivity extends AppCompatActivity {
                     Toast.makeText(EditNoteActivity.this, "Both Fields Can't Be Empty!", Toast.LENGTH_SHORT).show();
                 } else {
                     saveNote();
+                    final InputMethodManager iManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    assert iManager != null;
+                    iManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         });
@@ -373,13 +376,14 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         if(requestCode==REQUEST_CODE_CAPTURE_IMAGE && resultCode==RESULT_OK)
         {
-            if(data!=null)
-            {
-                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+            if (data!=null){
+                Bitmap capturedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+                assert capturedImage != null;
                 Uri capturedImageUri=getImageUri(this,capturedImage);
                 processImage(capturedImageUri);
             }
         }
+
     }
     private Uri getImageUri(Context context, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
