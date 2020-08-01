@@ -7,28 +7,43 @@
     android:orientation="vertical"
     tools:context=".fragments.FoundFragment">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/back_btn"
-        android:src="@drawable/goback"
-        android:background="@null"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:contentDescription="@null" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/back_btn"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back_btn"
+                android:src="@drawable/goback"
+                android:background="@null"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@null" />
+
+            <Button
+                android:id="@+id/btnUploads"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/buttonbg"
+                android:backgroundTint="@color/white"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:text="@string/my_uploads"
+                android:textColor="@color/light_blue"
+                tools:ignore="RelativeOverlap" />
 
             <EditText
                 android:id="@+id/item_category"
@@ -39,6 +54,7 @@
                 android:layout_marginEnd="50dp"
                 android:background="@drawable/input_field"
                 android:fontFamily="@font/noteregular"
+                android:layout_below="@+id/back_btn"
                 android:gravity="center"
                 android:hint="@string/enter_item_category"
                 android:importantForAutofill="no"
