@@ -51,27 +51,9 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
         setContentView(R.layout.activity_my_uploads);
         recyclerView=findViewById(R.id.recMyUploads);
         etSearch=findViewById(R.id.etSearch);
-        productsList=new ArrayList<>();
+
         showAllProducts();
 
-        adapter=new Lost_adapter(productsList,this,this);
-        layoutManager=new LinearLayoutManager(this);
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                filterItems(s.toString());
-            }
-        });
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
     }
     private void filterItems(String search){
         ArrayList<Product> searchList= new ArrayList<>();
@@ -145,6 +127,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
 
     private void showAllProducts(){
 
+        productsList=new ArrayList<>();
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         Query dref= FirebaseFirestore.getInstance().collection("Lost Items")
@@ -169,13 +152,30 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
                 }
             }
         });
+        adapter=new Lost_adapter(productsList,this,this);
+        layoutManager=new LinearLayoutManager(this);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterItems(s.toString());
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RQ_CODE && resultCode==RESULT_OK){
-            productsList=new ArrayList<>();
+
             adapter.notifyItemChanged(position);
             showAllProducts();
         }
