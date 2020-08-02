@@ -52,7 +52,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
         recyclerView=findViewById(R.id.recMyUploads);
         etSearch=findViewById(R.id.etSearch);
         productsList=new ArrayList<>();
-        adapter=new Lost_adapter(this, productsList);
+        adapter=new Lost_adapter(productsList,this,this);
         layoutManager=new LinearLayoutManager(this);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override

@@ -377,8 +377,9 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         if(requestCode==REQUEST_CODE_CAPTURE_IMAGE && resultCode==RESULT_OK)
         {
-            if (data!=null){
-                Bitmap capturedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            if(data!=null)
+            {
+                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
                 assert capturedImage != null;
                 Uri capturedImageUri=getImageUri(this,capturedImage);
                 processImage(capturedImageUri);
