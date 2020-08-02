@@ -270,6 +270,7 @@ public class EditNoteActivity extends AppCompatActivity {
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager())!=null)
         {
+            intent.putExtra( android.provider.MediaStore.EXTRA_SIZE_LIMIT, "720000");
             startActivityForResult(intent,REQUEST_CODE_CAPTURE_IMAGE);
         }
     }
@@ -383,7 +384,6 @@ public class EditNoteActivity extends AppCompatActivity {
                 processImage(capturedImageUri);
             }
         }
-
     }
     private Uri getImageUri(Context context, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
