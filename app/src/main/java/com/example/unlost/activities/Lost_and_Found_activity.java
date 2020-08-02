@@ -55,7 +55,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Lost_and_Found_activity extends AppCompatActivity implements Lost_adapter.ItemClicked {
+public class Lost_and_Found_activity extends AppCompatActivity implements Lost_adapter.ItemClicked, Lost_adapter.LongItemClicked {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
     EditText item_category,item_brand,item_brief,contact_details,search_product,item_location;
@@ -235,7 +235,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                 .show(Objects.requireNonNull(manager.findFragmentById(R.id.lost_frag))).commit();
 
         productsList=new ArrayList<>();
-        adapter=new Lost_adapter(this, productsList);
+        adapter=new Lost_adapter( productsList,this,this);
         layoutManager=new LinearLayoutManager(this);
 
         recyclerView.setLayoutManager(layoutManager);
@@ -367,5 +367,10 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         Intent intent=new Intent(Lost_and_Found_activity.this,ProductDescriptionActivity.class);
         intent.putExtra("document_id",id.get(index));
         startActivity(intent);
+    }
+
+    @Override
+    public void onLongItemClicked(int index, View view) {
+
     }
 }

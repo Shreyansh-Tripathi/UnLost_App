@@ -18,6 +18,7 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
 {
     private ArrayList<Product> products;
     ItemClicked activity;
+
     LongItemClicked activity2;
 
     public interface ItemClicked{
@@ -28,11 +29,10 @@ public class Lost_adapter extends RecyclerView.Adapter<Lost_adapter.ViewHolder>
          void onLongItemClicked(int index, View view);
     }
 
-    public Lost_adapter(Context context, ArrayList<Product> list)
-    {
-        products=list;
-        activity=(ItemClicked)context;
-        activity2=(LongItemClicked)context;
+    public Lost_adapter(ArrayList<Product> products, ItemClicked activity, LongItemClicked activity2) {
+        this.products = products;
+        this.activity = activity;
+        this.activity2 = activity2;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
