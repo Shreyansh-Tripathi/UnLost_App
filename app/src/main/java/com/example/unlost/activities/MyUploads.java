@@ -52,6 +52,8 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
         recyclerView=findViewById(R.id.recMyUploads);
         etSearch=findViewById(R.id.etSearch);
         productsList=new ArrayList<>();
+        showAllProducts();
+
         adapter=new Lost_adapter(productsList,this,this);
         layoutManager=new LinearLayoutManager(this);
         etSearch.addTextChangedListener(new TextWatcher() {
@@ -70,7 +72,6 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        showAllProducts();
     }
     private void filterItems(String search){
         ArrayList<Product> searchList= new ArrayList<>();
@@ -174,6 +175,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RQ_CODE && resultCode==RESULT_OK){
+            productsList=new ArrayList<>();
             adapter.notifyItemChanged(position);
             showAllProducts();
         }
