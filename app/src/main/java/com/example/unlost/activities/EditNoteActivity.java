@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class EditNoteActivity extends AppCompatActivity {
     EditText editnoteTitle, editnoteContent;
     ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn,saveNotebtn;
     static CountDownTimer reminder;
-    NotificationManagerCompat manager;
+    static NotificationManagerCompat manager;
     final static int RQ_CODE=1;
     final static int notifyId=2;
     public static final String DELETE_NOTE="deleteNote";
@@ -63,6 +64,8 @@ public class EditNoteActivity extends AppCompatActivity {
     ImageView imgShow1,imgShow2,imgShow3;
     LinearLayout imgLayout;
     private Note availableNote,newNote=new Note();
+    static MediaPlayer player;
+    public static String notificationButton = "Turn Off";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +273,6 @@ public class EditNoteActivity extends AppCompatActivity {
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager())!=null)
         {
-            intent.putExtra( android.provider.MediaStore.EXTRA_SIZE_LIMIT, "720000");
             startActivityForResult(intent,REQUEST_CODE_CAPTURE_IMAGE);
         }
     }
@@ -379,7 +381,7 @@ public class EditNoteActivity extends AppCompatActivity {
         {
             if(data!=null)
             {
-                Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                Bitmap capturedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                 assert capturedImage != null;
                 Uri capturedImageUri=getImageUri(this,capturedImage);
                 processImage(capturedImageUri);
@@ -457,10 +459,11 @@ public class EditNoteActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                reminderBtn.setImageResource(R.drawable.reminder_off);
                 notifyReminderFinished(v);
+                player=new MediaPlayer();
                 reminder.cancel();
                 activetimer=false;
+                reminderBtn.setImageResource(R.drawable.reminder_off);
                 Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
             }
         }.start();
@@ -468,7 +471,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     public void notifyReminderInProgress(View view)
     {
-        Intent intent = new Intent(this, AllNotesActivity.class);
+        Intent intent = new Intent(this, EditNoteActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
         Notification notification= new NotificationCompat.Builder(this, channelId)
@@ -489,8 +492,11 @@ public class EditNoteActivity extends AppCompatActivity {
 
     public void notifyReminderFinished(View view)
     {
-        Intent intent = new Intent(this, AllNotesActivity.class);
+        Intent intent = new Intent(EditNoteActivity.this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
+
+       Intent stopMusic= new Intent(this, NotificationReceiver.class);
+       PendingIntent action=PendingIntent.getBroadcast(this, 0, stopMusic, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Notification notification= new NotificationCompat.Builder(this, channelId)
                 .setContentIntent(gotoapp)
@@ -501,6 +507,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setContentTitle("Reminder")
                 .setContentText("Finished")
                 .setColor(Color.BLUE)
+                .addAction(R.mipmap.ic_launcher_round, notificationButton , action)
                 .setSmallIcon(R.drawable.reminder_over)
                 .build();
         manager.notify(notifyId, notification);

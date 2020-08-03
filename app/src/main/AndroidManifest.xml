@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".activities.EditProductActivity"></activity>
+        <activity android:name=".activities.EditProductActivity">
+
+        </activity>
         <activity android:name=".activities.MyUploads" />
         <activity android:name=".activities.ProductDescriptionActivity" />
         <activity android:name=".activities.SplashScreenActivity">
@@ -34,7 +36,9 @@
         <activity
             android:name=".activities.EditNoteActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
+        <receiver android:name=".activities.NotificationReceiver"/>
+
         <activity
             android:name=".activities.AllNotesActivity"
             android:screenOrientation="portrait"
