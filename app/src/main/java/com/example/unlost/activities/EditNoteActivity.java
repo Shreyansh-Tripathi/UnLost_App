@@ -471,7 +471,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     public void notifyReminderInProgress(View view)
     {
-        Intent intent = new Intent(this, EditNoteActivity.class);
+        Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
         Notification notification= new NotificationCompat.Builder(this, channelId)
