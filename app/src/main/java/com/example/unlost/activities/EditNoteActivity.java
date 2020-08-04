@@ -51,6 +51,7 @@ public class EditNoteActivity extends AppCompatActivity {
     EditText editnoteTitle, editnoteContent;
     ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn,saveNotebtn;
     static CountDownTimer reminder;
+    @SuppressLint("StaticFieldLeak")
     static NotificationManagerCompat manager;
     final static int RQ_CODE=1;
     final static int notifyId=2;
@@ -85,6 +86,9 @@ public class EditNoteActivity extends AppCompatActivity {
         imgLayout=findViewById(R.id.imgLayout);
 
         manager= NotificationManagerCompat.from(this);
+
+        player= MediaPlayer.create(this, R.raw.tune_test);
+        player.setLooping(true);
 
         goBackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -460,7 +464,8 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 notifyReminderFinished(v);
-                player=new MediaPlayer();
+                player.start();
+                player.setScreenOnWhilePlaying(true);
                 reminder.cancel();
                 activetimer=false;
                 reminderBtn.setImageResource(R.drawable.reminder_off);
