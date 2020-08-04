@@ -13,6 +13,9 @@ public class Note implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "activeTimer")
+    private boolean activeTimer;
+
     @ColumnInfo(name = "title")
     private String title;
 
@@ -75,5 +78,11 @@ public class Note implements Serializable {
         this.imagePath3 = imagePath3;
     }
 
+    public boolean isActiveTimer() {
+        return activeTimer;
+    }
 
+    public void setActiveTimer(boolean activeTimer) {
+        this.activeTimer = activeTimer;
+    }
 }

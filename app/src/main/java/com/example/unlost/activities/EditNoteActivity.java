@@ -54,9 +54,9 @@ public class EditNoteActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     static NotificationManagerCompat manager;
     final static int RQ_CODE=1;
-    final static int notifyId=2;
+    static int notifyId=-1;
     public static final String DELETE_NOTE="deleteNote";
-    static boolean activetimer;
+    static int notificationId=1;
     private static final int REQUEST_CODE_STORAGE_PERMISSION=3;
     private static final int REQUEST_CODE_CAMERA=5;
     private static final int REQUEST_CODE_SELECT_IMAGE=4;
@@ -87,7 +87,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
         manager= NotificationManagerCompat.from(this);
 
-        player= MediaPlayer.create(this, R.raw.tune_test);
+        player= MediaPlayer.create(this, R.raw.reminder_sound);
         player.setLooping(true);
 
         goBackbtn.setOnClickListener(new View.OnClickListener() {
@@ -100,17 +100,17 @@ public class EditNoteActivity extends AppCompatActivity {
             }
         });
 
-        if (!activetimer){
-            reminderBtn.setImageResource(R.drawable.reminder_off);
-        }
-        else {
-            reminderBtn.setImageResource(R.drawable.reminder_on);
-        }
-
         if (getIntent().getBooleanExtra("updateOrViewNote", false))
         {
             availableNote=(Note)getIntent().getSerializableExtra("note");
             setNote();
+        }
+
+        if (!getActiveTimer()){
+            reminderBtn.setImageResource(R.drawable.reminder_off);
+        }
+        else {
+            reminderBtn.setImageResource(R.drawable.reminder_on);
         }
 
         if (TextUtils.isEmpty(editnoteContent.getText().toString().trim()) && TextUtils.isEmpty(editnoteTitle.getText().toString().trim()))
@@ -190,7 +190,7 @@ public class EditNoteActivity extends AppCompatActivity {
         reminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!activetimer) {
+                if (!getActiveTimer()) {
                     Intent intent = new Intent(EditNoteActivity.this, ReminderActivity.class);
                     startActivityForResult(intent, RQ_CODE);
                 }
@@ -198,8 +198,8 @@ public class EditNoteActivity extends AppCompatActivity {
                     reminderBtn.setImageResource(R.drawable.reminder_off);
                     reminder.cancel();
                     Toast.makeText(EditNoteActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                    notifyReminderFinished(v);
-                    activetimer=false;
+                    notifyReminderFinished(v,newNote.getId());
+                    setActivetimer(false);
                 }
             }
         });
@@ -250,6 +250,20 @@ public class EditNoteActivity extends AppCompatActivity {
                         .setNegativeButton("No", null).show();
             }
         });
+    }
+
+    public boolean getActiveTimer(){
+        if (availableNote!=null)
+            return availableNote.isActiveTimer();
+        else
+            return newNote.isActiveTimer();
+    }
+
+    public void setActivetimer(boolean timer){
+        if (availableNote!=null)
+            availableNote.setActiveTimer(timer);
+        else
+            newNote.setActiveTimer(timer);
     }
 
     private void setNote() {
@@ -317,6 +331,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     private void saveNote()
     {
+        notificationId++;
         newNote.setTitle(editnoteTitle.getText().toString());
         newNote.setDescription(editnoteContent.getText().toString());
         if(imgShow1.getDrawable()!=null)
@@ -334,6 +349,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
         if (availableNote!=null){
             newNote.setId(availableNote.getId());
+            newNote.setActiveTimer(getActiveTimer());
         }
 
         @SuppressLint("StaticFieldLeak")
@@ -366,7 +382,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
-                    notifyReminderInProgress(reminderBtn);
+                    notifyReminderInProgress(reminderBtn, notificationId);
                     countertimer(total_secs, reminderBtn);
                 }
                 else
@@ -458,24 +474,25 @@ public class EditNoteActivity extends AppCompatActivity {
         reminder = new CountDownTimer(timer * 1000 + 100, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                activetimer=true;
+                setActivetimer(true);
             }
 
             @Override
             public void onFinish() {
-                notifyReminderFinished(v);
+                notifyReminderFinished(v, notificationId);
                 player.start();
                 player.setScreenOnWhilePlaying(true);
                 reminder.cancel();
-                activetimer=false;
+                setActivetimer(false);
                 reminderBtn.setImageResource(R.drawable.reminder_off);
                 Toast.makeText(EditNoteActivity.this, "Reminder Time Finished!", Toast.LENGTH_SHORT).show();
             }
         }.start();
     }
 
-    public void notifyReminderInProgress(View view)
+    public void notifyReminderInProgress(View view, int id)
     {
+        notifyId=id;
         Intent intent = new Intent(this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
@@ -485,8 +502,8 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("Reminder")
-                .setContentText("In Progress")
+                .setContentTitle(editnoteTitle.getText().toString().trim())
+                .setContentText("Reminder In Progress")
                 .setColor(Color.BLUE)
                 .setSmallIcon(R.drawable.reminder_on)
                 .setOngoing(true)
@@ -495,8 +512,9 @@ public class EditNoteActivity extends AppCompatActivity {
         manager.notify(notifyId, notification);
     }
 
-    public void notifyReminderFinished(View view)
+    public void notifyReminderFinished(View view, int id)
     {
+        notifyId=id;
         Intent intent = new Intent(EditNoteActivity.this, AllNotesActivity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
@@ -509,12 +527,19 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(Notification.CATEGORY_ALARM)
-                .setContentTitle("Reminder")
-                .setContentText("Finished")
+                .setContentTitle(editnoteTitle.getText().toString().trim())
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(editnoteContent.getText().toString().trim()))
+                .setContentText(editnoteContent.getText().toString().trim())
                 .setColor(Color.BLUE)
                 .addAction(R.mipmap.ic_launcher_round, notificationButton , action)
                 .setSmallIcon(R.drawable.reminder_over)
                 .build();
         manager.notify(notifyId, notification);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        notificationId++;
     }
 }
