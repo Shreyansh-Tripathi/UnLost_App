@@ -197,11 +197,13 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
 
                 else
                 {
+                    ArrayList<HashMap> answers= new ArrayList<>();
                     item.put("user_id",user.getUid());
                     item.put("item_category", category);
                     item.put("item_brand",brand);
                     item.put("item_location",location);
                     item.put("contact_number",contact);
+                    item.put("answers", answers);
                     item.put("url", url);
                     assert user != null;
                     item.put("contact_name",user.getDisplayName());

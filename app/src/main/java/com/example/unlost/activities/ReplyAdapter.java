@@ -8,15 +8,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.unlost.R;
-
 import java.util.ArrayList;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
 
     ArrayList<Reply> replyList;
+    ItemClick activity;
+
+    public interface ItemClick{
+        void onClick(int index);
+    }
 
     public ReplyAdapter(ArrayList<Reply> replyList, Context context) {
         this.replyList = replyList;
+        this.activity=(ItemClick) context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -31,7 +36,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    activity.onClick(replyList.indexOf((Reply)v.getTag()));
                 }
             });
         }
