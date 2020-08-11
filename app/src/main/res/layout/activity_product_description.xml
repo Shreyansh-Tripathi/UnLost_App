@@ -67,22 +67,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvItemBrief"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="5dp"
-            android:text="@string/brief"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView14"
@@ -97,6 +81,7 @@
             android:background="@drawable/buttonbg"
             android:gravity="center_horizontal"
             android:padding="5dp"
+            android:visibility="gone"
             android:text="@string/contact_details"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -111,6 +96,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
+            android:visibility="gone"
             android:text="@string/contact_details"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -123,6 +109,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:visibility="gone"
             android:layout_marginBottom="10dp"
             android:padding="5dp"
             android:text="@string/contact"
@@ -163,12 +150,64 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/ight"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttonbg"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/verify"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            />
+
+        <EditText
+            android:id="@+id/etVerification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/input_field"
+            android:padding="5dp"
+            android:hint="@string/enter_some_unique_features_about_your_item"
+            android:singleLine="true"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/verifyBtn"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="@drawable/input_field"
+            android:backgroundTint="#2F47F3"
+            android:layout_marginTop="10dp"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
             android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/buttonbg"

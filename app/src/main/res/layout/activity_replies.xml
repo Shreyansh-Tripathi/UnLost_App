@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.RepliesActivity">
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/goback"
+        android:backgroundTint="@color/white"
+        android:onClick="onbackpressed"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/back"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/bold"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:text="@string/replies"
+        android:textColor="@color/text_blue"
+        android:layout_marginStart="110dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/repliesList"
+        android:layout_margin="15dp"
+        android:layout_below="@+id/back"/>
+
+</RelativeLayout>

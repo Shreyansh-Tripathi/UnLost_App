@@ -56,7 +56,6 @@ public class EditNoteActivity extends AppCompatActivity {
     final static int RQ_CODE=1;
     static int notifyId=-1;
     public static final String DELETE_NOTE="deleteNote";
-    static int notificationId=1;
     private static final int REQUEST_CODE_STORAGE_PERMISSION=3;
     private static final int REQUEST_CODE_CAMERA=5;
     private static final int REQUEST_CODE_SELECT_IMAGE=4;
@@ -104,6 +103,12 @@ public class EditNoteActivity extends AppCompatActivity {
         {
             availableNote=(Note)getIntent().getSerializableExtra("note");
             setNote();
+        }
+        if (availableNote==null){
+            newNote.setId(AllNotesActivity.AllNotes.size()+1);
+        }
+        else {
+            newNote.setId(availableNote.getId());
         }
 
         if (!getActiveTimer()){
@@ -331,7 +336,6 @@ public class EditNoteActivity extends AppCompatActivity {
 
     private void saveNote()
     {
-        notificationId++;
         newNote.setTitle(editnoteTitle.getText().toString());
         newNote.setDescription(editnoteContent.getText().toString());
         if(imgShow1.getDrawable()!=null)
@@ -382,7 +386,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 int total_secs=data.getIntExtra(ReminderActivity.totaltime, -1);
                 if (total_secs!= -1)
                 {
-                    notifyReminderInProgress(reminderBtn, notificationId);
+                    notifyReminderInProgress(reminderBtn, newNote.getId());
                     countertimer(total_secs, reminderBtn);
                 }
                 else
@@ -410,7 +414,7 @@ public class EditNoteActivity extends AppCompatActivity {
     }
     private Uri getImageUri(Context context, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 1000, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
@@ -479,7 +483,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                notifyReminderFinished(v, notificationId);
+                notifyReminderFinished(v, newNote.getId());
                 player.start();
                 player.setScreenOnWhilePlaying(true);
                 reminder.cancel();
@@ -535,11 +539,5 @@ public class EditNoteActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.reminder_over)
                 .build();
         manager.notify(notifyId, notification);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        notificationId++;
     }
 }

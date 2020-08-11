@@ -58,7 +58,7 @@ import java.util.Objects;
 public class Lost_and_Found_activity extends AppCompatActivity implements Lost_adapter.ItemClicked, Lost_adapter.LongItemClicked {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_CAPTURE_IMAGE =2 ;
-    EditText item_category,item_brand,item_brief,contact_details,search_product,item_location;
+    EditText item_category,item_brand,contact_details,search_product,item_location;
     Button save_item,btnUploads;
     ImageButton back_btn;
     LinearLayout add_image;
@@ -83,7 +83,6 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
         setContentView(R.layout.activity_lost_and__found_activity);
         item_category=findViewById(R.id.item_category);
         item_brand=findViewById(R.id.item_brand);
-        item_brief=findViewById(R.id.item_brief);
         item_location=findViewById(R.id.item_location);
         contact_details=findViewById(R.id.contact_details);
         search_product=findViewById(R.id.search_product);
@@ -185,11 +184,10 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
 
                 String category=item_category.getText().toString();
                 String brand=item_brand.getText().toString();
-                String brief=item_brief.getText().toString();
                 String location=item_location.getText().toString().trim();
                 String contact=contact_details.getText().toString();
 
-                if(TextUtils.isEmpty(category)||TextUtils.isEmpty(brief)||TextUtils.isEmpty(contact)||TextUtils.isEmpty(location))
+                if(TextUtils.isEmpty(contact)||TextUtils.isEmpty(location))
                 {
                     Toast.makeText(Lost_and_Found_activity.this, "Please enter all fields marked with *", Toast.LENGTH_SHORT).show();
                 }
@@ -202,7 +200,6 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     item.put("user_id",user.getUid());
                     item.put("item_category", category);
                     item.put("item_brand",brand);
-                    item.put("item_brief",brief);
                     item.put("item_location",location);
                     item.put("contact_number",contact);
                     item.put("url", url);
@@ -211,7 +208,6 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
                     db.collection("Lost Items").add(item);
                     Toast.makeText(Lost_and_Found_activity.this, "Item Registered!", Toast.LENGTH_SHORT).show();
                     item_brand.setText(null);
-                    item_brief.setText(null);
                     item_category.setText(null);
                     contact_details.setText(null);
                     item_location.setText(null);

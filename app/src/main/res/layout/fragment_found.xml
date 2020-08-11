@@ -31,15 +31,16 @@
 
             <Button
                 android:id="@+id/btnUploads"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
+                android:layout_below="@+id/save_item"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="120dp"
+                android:layout_marginStart="120dp"
                 android:background="@drawable/buttonbg"
                 android:backgroundTint="@color/white"
-                android:textSize="12sp"
+                android:gravity="center"
+                android:textSize="20sp"
                 android:textStyle="italic"
                 android:text="@string/my_uploads"
                 android:textColor="@color/light_blue"
@@ -78,21 +79,7 @@
                 android:textSize="18sp"
                 android:fontFamily="@font/noteregular"/>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/item_brief"
-                android:background="@drawable/input_field"
-                android:hint="@string/enter_item_details"
-                android:layout_below="@+id/item_brand"
-                android:layout_marginTop="50dp"
-                android:inputType="textCapSentences"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:fontFamily="@font/noteregular"
-                android:importantForAutofill="no" />
+
 
             <EditText
                 android:layout_width="match_parent"
@@ -100,7 +87,7 @@
                 android:id="@+id/item_location"
                 android:background="@drawable/input_field"
                 android:hint="@string/enter_location"
-                android:layout_below="@+id/item_brief"
+                android:layout_below="@+id/item_brand"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
@@ -176,10 +163,13 @@
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="110dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/buttonbg"
                 android:text="@string/save"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="RtlSymmetry" />
 
             <TextView
                 android:layout_width="match_parent"
