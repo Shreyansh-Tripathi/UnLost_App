@@ -108,8 +108,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                         mapList.get(index).replace("verified",true);
                         dref.update("answers",mapList);
                         message="Your details have been verified. You can now find the contact details of that person in the Lost Section!";
-                         DocumentReference documentReference=FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
-                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()){
@@ -131,7 +130,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                                         }
                                     });
                                     sendNotification(usertoken, title, message);
-                                }
+                                 }
                             }
                         });
                     }
