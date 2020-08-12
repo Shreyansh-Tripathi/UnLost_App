@@ -17,10 +17,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.example.unlost.R;
+import com.example.unlost.notification.APIService;
+import com.example.unlost.notification.Client;
+import com.example.unlost.notification.Data;
+import com.example.unlost.notification.NotificationSender;
+import com.example.unlost.notification.Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -33,6 +43,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.ItemClick {
@@ -43,6 +56,9 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
    RecyclerView repliesList;
    RecyclerView.LayoutManager layoutManager;
     ArrayList<HashMap> mapList;
+    private APIService apiService;
+    String message,title,userIdTo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +71,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
         layoutManager=new LinearLayoutManager(this);
         repliesList.setHasFixedSize(true);
         repliesList.setLayoutManager(layoutManager);
+        apiService= Client.getClient("https://fcmgoogleapis.com/").create(APIService.class);
 
         DocumentReference documentReference= FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -90,8 +107,35 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                     public void onClick(DialogInterface dialog, int which) {
                         mapList.get(index).replace("verified",true);
                         dref.update("answers",mapList);
+                        message="Your details have been verified. You can now find the contact details of that person in the Lost Section!";
+                        dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    DocumentSnapshot snapshot=task.getResult();
+                                    assert snapshot != null;
+                                    title= snapshot.get("item_category").toString()+":"+snapshot.get("item_brand").toString();
+                                    userIdTo=mapList.get(index).get("user_id").toString();
+
+                                    FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String usertoken=dataSnapshot.getValue(String.class);
+                                            sendNotification(usertoken, title, message);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
                     }
                 })
+
                 .setNegativeButton("No, Delete!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -99,9 +143,54 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                 adapter.notifyItemRemoved(index);
                 mapList.remove(index);
                 dref.update("answers", mapList);
+                message="Your answer doesn't match the required credentials, so your product request has been declined!";
+                dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot snapshot=task.getResult();
+                            assert snapshot != null;
+                            title= snapshot.get("item_category").toString()+":"+snapshot.get("item_brand").toString();
+                            userIdTo=mapList.get(index).get("user_id").toString();
+
+                            FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String usertoken=dataSnapshot.getValue(String.class);
+                                    sendNotification(usertoken, title, message);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
             }
         }).show();
     }
+
+    public void sendNotification(String userToken, String title, String message){
+        Data data=new Data(title, message);
+        NotificationSender sender=new NotificationSender(data, userToken);
+        apiService.sendNotification(sender).enqueue(new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                if (response.code()==200){
+                    if (response.body().success!=1){
+                        Toast.makeText(RepliesActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+            }
+        });
+    }
+
     public void onbackpressed(View v){
         onBackPressed();
     }

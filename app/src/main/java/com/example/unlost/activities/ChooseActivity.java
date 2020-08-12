@@ -9,7 +9,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.unlost.R;
+import com.example.unlost.notification.Token;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class ChooseActivity extends AppCompatActivity {
 
@@ -23,6 +27,7 @@ public class ChooseActivity extends AppCompatActivity {
         logout=findViewById(R.id.logout_btn);
         noteActivity=findViewById(R.id.noteActivity);
         lostActivity=findViewById(R.id.lostActivity);
+        updateToken();
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,5 +50,13 @@ public class ChooseActivity extends AppCompatActivity {
                 startActivity(new Intent(ChooseActivity.this,Lost_and_Found_activity.class));
             }
         });
+    }
+
+    public void updateToken(){
+        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        String refreshToken= FirebaseInstanceId.getInstance().getToken();
+        Token token =new Token(refreshToken);
+        assert user != null;
+        FirebaseDatabase.getInstance().getReference("Tokens").child(user.getUid()).setValue(token);
     }
 }
