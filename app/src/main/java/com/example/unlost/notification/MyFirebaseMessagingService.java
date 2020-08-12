@@ -31,8 +31,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, Lost_and_Found_activity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                .setOnlyAlertOnce(true)
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), channelId);
+         notification.setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(Notification.CATEGORY_MESSAGE)
                 .setContentTitle(title)
@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(gotoapp)
                 .setAutoCancel(true);
 
-        NotificationManagerCompat  manager= NotificationManagerCompat.from(getApplicationContext());
+        NotificationManagerCompat manager= NotificationManagerCompat.from(getApplicationContext());
         manager.notify(101, notification.build());
     }
 }

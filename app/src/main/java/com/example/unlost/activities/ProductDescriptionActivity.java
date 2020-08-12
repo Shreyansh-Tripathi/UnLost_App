@@ -3,10 +3,9 @@ package com.example.unlost.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.icu.text.CaseMap;
+
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +35,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
-
-import java.io.NotSerializableException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -139,22 +135,24 @@ public class ProductDescriptionActivity extends AppCompatActivity {
                                              title= snapshot.get("item_category").toString() +":"+ snapshot.get("item_brand").toString();
                                              message= "You have received a Reply on "+snapshot.get("item_brand").toString() +" "+ snapshot.get("item_category").toString();
                                             userIdTo=snapshot.get("user_id").toString();
+
+                                            FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                    String usertoken=dataSnapshot.getValue(String.class);
+                                                    sendNotification(usertoken, title, message);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
                                         }
                                     }
                                 });
-                               FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                                   @Override
-                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                       String usertoken=dataSnapshot.getValue(String.class);
-                                       sendNotification(usertoken, title, message);
-                                   }
-
-                                   @Override
-                                   public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                   }
-                               });
                                Toast.makeText(ProductDescriptionActivity.this, "Data Sent To The Person who is having your object. Please Wait Till Verification is done!", Toast.LENGTH_LONG).show();
                                etVerification.setText("");
                            }

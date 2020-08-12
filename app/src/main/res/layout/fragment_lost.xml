@@ -32,7 +32,7 @@
         android:fontFamily="@font/regular"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
-        android:hint="Enter Item Name"
+        android:hint="@string/enter_item_name"
         android:inputType="textPersonName"
         android:textSize="22sp"
         android:drawableEnd="@drawable/searchbar_icon"

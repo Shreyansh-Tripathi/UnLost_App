@@ -58,7 +58,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
     ArrayList<HashMap> mapList;
     private APIService apiService;
     String message,title,userIdTo;
-
+    String usertoken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,8 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                         mapList.get(index).replace("verified",true);
                         dref.update("answers",mapList);
                         message="Your details have been verified. You can now find the contact details of that person in the Lost Section!";
-                        dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                         DocumentReference documentReference=FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
+                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()){
@@ -120,8 +121,8 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
                                     FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            String usertoken=dataSnapshot.getValue(String.class);
-                                            sendNotification(usertoken, title, message);
+                                             usertoken=dataSnapshot.getValue(String.class);
+
                                         }
 
                                         @Override
@@ -129,10 +130,10 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
 
                                         }
                                     });
+                                    sendNotification(usertoken, title, message);
                                 }
                             }
                         });
-
                     }
                 })
 
@@ -141,23 +142,22 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
             public void onClick(DialogInterface dialog, int which) {
                 replies.remove(index);
                 adapter.notifyItemRemoved(index);
-                mapList.remove(index);
-                dref.update("answers", mapList);
                 message="Your answer doesn't match the required credentials, so your product request has been declined!";
                 dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
+
                             DocumentSnapshot snapshot=task.getResult();
                             assert snapshot != null;
                             title= snapshot.get("item_category").toString()+":"+snapshot.get("item_brand").toString();
                             userIdTo=mapList.get(index).get("user_id").toString();
-
+                            mapList.remove(index);
+                            dref.update("answers", mapList);
                             FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String usertoken=dataSnapshot.getValue(String.class);
-                                    sendNotification(usertoken, title, message);
+                                     usertoken=dataSnapshot.getValue(String.class);
                                 }
 
                                 @Override
@@ -165,6 +165,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
 
                                 }
                             });
+                            sendNotification(usertoken, title, message);
                         }
                     }
                 });
