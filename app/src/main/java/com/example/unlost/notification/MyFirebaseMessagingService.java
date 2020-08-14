@@ -21,12 +21,14 @@ import static com.example.unlost.notification.NotificationChannel.channelId;
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     String title,message;
+    String notificationId;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         title=remoteMessage.getData().get("title");
         message=remoteMessage.getData().get("message");
+        notificationId=remoteMessage.getData().get("notificationId");
 
         Intent intent = new Intent(this, Lost_and_Found_activity.class);
         PendingIntent gotoapp= PendingIntent.getActivity(this, 0, intent, 0);
@@ -44,6 +46,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true);
 
         NotificationManagerCompat manager= NotificationManagerCompat.from(getApplicationContext());
-        manager.notify(101, notification.build());
+        manager.notify(Integer.parseInt(notificationId), notification.build());
     }
 }

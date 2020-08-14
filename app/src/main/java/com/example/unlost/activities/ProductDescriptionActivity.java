@@ -53,6 +53,7 @@ public class ProductDescriptionActivity extends AppCompatActivity {
      ArrayList<HashMap> answers;
      private APIService apiService;
      String title,message,userIdTo;
+     int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class ProductDescriptionActivity extends AppCompatActivity {
         progress_bar=findViewById(R.id.progress_bar);
         Intent intent=getIntent();
         id=intent.getStringExtra("document_id");
+        index=intent.getIntExtra("index",-1);
         assert id != null;
         final FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
@@ -111,37 +113,50 @@ public class ProductDescriptionActivity extends AppCompatActivity {
         verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, ArrayList<HashMap>> items=new HashMap<>();
-                HashMap<String, Object> answersMap=new HashMap<>();
-                String ans=etVerification.getText().toString().trim();
-                answersMap.put("user_id", user.getUid());
-                answersMap.put("answer", ans);
-                answersMap.put("username", user.getDisplayName());
-                answersMap.put("verified", false);
-                answers.add(answersMap);
-                items.put("answers", answers);
+                int i=0;
+                for ( i = 0; i < answers.size(); i++) {
+                    if (answers.get(i).get("user_id").toString().equals(userId)) {
+                        Toast.makeText(ProductDescriptionActivity.this, "You've already sent your response. Please wait till the user verifies.", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                    else if ((boolean)answers.get(i).get("verified")){
+                        Toast.makeText(ProductDescriptionActivity.this, "The Product has already been verified!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                }
+                if (i == answers.size())
+                {
+                    HashMap<String, ArrayList<HashMap>> items = new HashMap<>();
+                    HashMap<String, Object> answersMap = new HashMap<>();
+                    String ans = etVerification.getText().toString().trim();
+                    answersMap.put("user_id", user.getUid());
+                    answersMap.put("answer", ans);
+                    answersMap.put("username", user.getDisplayName());
+                    answersMap.put("verified", false);
+                    answers.add(answersMap);
+                    items.put("answers", answers);
 
-                final DocumentReference documentReference= FirebaseFirestore.getInstance().collection("Lost Items").document(id);
-                documentReference.set(items, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                           if (task.isSuccessful()){
+                    final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Lost Items").document(id);
+                    documentReference.set(items, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
                                 documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()){
-                                            DocumentSnapshot snapshot= task.getResult();
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot snapshot = task.getResult();
                                             assert snapshot != null;
-                                             title= snapshot.get("item_category").toString() +":"+ snapshot.get("item_brand").toString();
-                                             message= "You have received a Reply on "+snapshot.get("item_brand").toString() +" "+ snapshot.get("item_category").toString();
-                                            userIdTo=snapshot.get("user_id").toString();
+                                            title = snapshot.get("item_category").toString() + ":" + snapshot.get("item_brand").toString();
+                                            message = "You have received a Reply on " + snapshot.get("item_brand").toString() + " " + snapshot.get("item_category").toString();
+                                            userIdTo = snapshot.get("user_id").toString();
 
                                             FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                    String usertoken=dataSnapshot.getValue(String.class);
-                                                    sendNotification(usertoken, title, message);
+                                                    String usertoken = dataSnapshot.getValue(String.class);
+                                                    sendNotification(usertoken, title, message, index);
                                                 }
 
                                                 @Override
@@ -153,13 +168,13 @@ public class ProductDescriptionActivity extends AppCompatActivity {
                                     }
                                 });
 
-                               Toast.makeText(ProductDescriptionActivity.this, "Data Sent To The Person who is having your object. Please Wait Till Verification is done!", Toast.LENGTH_LONG).show();
-                               etVerification.setText("");
-                           }
-                           else
-                               Toast.makeText(ProductDescriptionActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                                Toast.makeText(ProductDescriptionActivity.this, "Data Sent To The Person who is having your object. Please Wait Till Verification is done!", Toast.LENGTH_LONG).show();
+                                etVerification.setText("");
+                            } else
+                                Toast.makeText(ProductDescriptionActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -188,8 +203,8 @@ public class ProductDescriptionActivity extends AppCompatActivity {
 
     }
 
-    public void sendNotification(String userToken, String title, String message){
-        Data data=new Data(title, message);
+    public void sendNotification(String userToken, String title, String message, int notificationId){
+        Data data=new Data(title, message, notificationId);
         NotificationSender sender=new NotificationSender(data, userToken);
         apiService.sendNotification(sender).enqueue(new Callback<Response>() {
             @Override

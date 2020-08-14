@@ -2,6 +2,15 @@ package com.example.unlost.notification;
 
 public class Data {
     private String title, message;
+    private int notificationId;
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
 
     public String getTitle() {
         return title;
@@ -19,8 +28,9 @@ public class Data {
         this.message = message;
     }
 
-    public Data(String title, String message) {
+    public Data(String title, String message, int notificationId) {
         this.title = title;
         this.message = message;
+        this.notificationId = notificationId;
     }
 }

@@ -364,6 +364,7 @@ public class Lost_and_Found_activity extends AppCompatActivity implements Lost_a
     public void onItemClicked(int index) {
         Intent intent=new Intent(Lost_and_Found_activity.this,ProductDescriptionActivity.class);
         intent.putExtra("document_id",id.get(index));
+        intent.putExtra("index", index);
         startActivity(intent);
     }
 

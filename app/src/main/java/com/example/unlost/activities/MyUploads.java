@@ -123,6 +123,7 @@ public class MyUploads extends AppCompatActivity implements Lost_adapter.ItemCli
             case R.id.replies:
                 Intent intent1=new Intent(MyUploads.this, RepliesActivity.class);
                 intent1.putExtra("DOC_ID", id.get(position));
+                intent1.putExtra("index",position);
                 startActivity(intent1);
 
             default:

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/replies"
+        android:title="@string/replies"/>
+
     <item
         android:id="@+id/editproduct"
         android:title="@string/edit"
@@ -8,7 +12,6 @@
         android:id="@+id/deleteproduct"
         android:title="@string/delete" />
 
-    <item android:id="@+id/replies"
-        android:title="@string/replies"/>
+
 
 </menu>

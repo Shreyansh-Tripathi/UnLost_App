@@ -59,6 +59,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
     private APIService apiService;
     String message,title,userIdTo;
     String usertoken;
+    int index1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
         repliesList=findViewById(R.id.repliesList);
         Intent intent=getIntent();
         doc_id=intent.getStringExtra("DOC_ID");
+        index1=intent.getIntExtra("index",-1);
         layoutManager=new LinearLayoutManager(this);
         repliesList.setHasFixedSize(true);
         repliesList.setLayoutManager(layoutManager);
@@ -129,7 +131,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
 
                                         }
                                     });
-                                    sendNotification(usertoken, title, message);
+                                    sendNotification(usertoken, title, message,index1);
                                  }
                             }
                         });
@@ -164,7 +166,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
 
                                 }
                             });
-                            sendNotification(usertoken, title, message);
+                            sendNotification(usertoken, title, message,index1);
                         }
                     }
                 });
@@ -172,8 +174,8 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
         }).show();
     }
 
-    public void sendNotification(String userToken, String title, String message){
-        Data data=new Data(title, message);
+    public void sendNotification(String userToken, String title, String message, int id){
+        Data data=new Data(title, message, id);
         NotificationSender sender=new NotificationSender(data, userToken);
         apiService.sendNotification(sender).enqueue(new Callback<Response>() {
             @Override
