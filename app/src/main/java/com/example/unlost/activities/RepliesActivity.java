@@ -107,7 +107,7 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
             final DocumentReference dref = FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(RepliesActivity.this);
-            alertDialog.setTitle("Is That Enough?").setMessage("Please Make Sure that enough details are provided for Verification")
+            alertDialog.setTitle("Is That Enough?").setMessage("Please Make Sure that enough details are provided for Verification").setIcon(R.drawable.warning)
                     .setPositiveButton("Yes, Verify!", new DialogInterface.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.N)
                         @Override
