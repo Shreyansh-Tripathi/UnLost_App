@@ -1,8 +1,10 @@
 package com.example.unlost.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,9 +34,22 @@ public class ChooseActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(ChooseActivity.this, LoginActivity.class));
-                finish();
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(ChooseActivity.this);
+                alertDialog.setTitle("Are You Sure?").setMessage("Do You Want to Log out?").setIcon(R.drawable.warning)
+                        .setPositiveButton("Yes, Logout!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(ChooseActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
             }
         });
 

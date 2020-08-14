@@ -114,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
-                            Toast.makeText(SignUpActivity.this, "Logged In", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "User Registered Successfully. You're Logged In!", Toast.LENGTH_SHORT).show();
                             updateUI(user);
                         }
                         else

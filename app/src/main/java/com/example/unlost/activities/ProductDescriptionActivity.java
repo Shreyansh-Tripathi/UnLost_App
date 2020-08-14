@@ -103,7 +103,7 @@ public class ProductDescriptionActivity extends AppCompatActivity {
                     tvContactName.setText(Objects.requireNonNull(doc.get("contact_name")).toString());
                     tvContactNumber.setText(Objects.requireNonNull(doc.get("contact_number")).toString());
                     tvlocation.setText(Objects.requireNonNull(doc.get("item_location")).toString());
-                    Picasso.with(ProductDescriptionActivity.this).load(Objects.requireNonNull(doc.get("url")).toString()).fit().centerInside()
+                    Picasso.with(ProductDescriptionActivity.this).load(Objects.requireNonNull(doc.get("url")).toString())
                             .into(ivLostImage);
                     progress_bar.setVisibility(View.GONE);
                 }
@@ -124,7 +124,7 @@ public class ProductDescriptionActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                if (i == answers.size())
+                if (i == answers.size() && !etVerification.getText().toString().trim().isEmpty())
                 {
                     HashMap<String, ArrayList<HashMap>> items = new HashMap<>();
                     HashMap<String, Object> answersMap = new HashMap<>();

@@ -99,79 +99,91 @@ public class RepliesActivity extends AppCompatActivity implements ReplyAdapter.I
 
     @Override
     public void onClick(final int index) {
-        final DocumentReference dref= FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
+        if ((boolean)mapList.get(index).get("verified")){
+            Toast.makeText(this, "Already Verified!", Toast.LENGTH_SHORT).show();
+        }
 
-        AlertDialog.Builder alertDialog= new AlertDialog.Builder(RepliesActivity.this);
-        alertDialog.setTitle("Is That Enough?").setMessage("Please Make Sure that enough details are provided for Verification")
-                .setPositiveButton("Yes, Verify!", new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mapList.get(index).replace("verified",true);
-                        dref.update("answers",mapList);
-                        message="Your details have been verified. You can now find the contact details of that person in the Lost Section!";
-                        dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    DocumentSnapshot snapshot=task.getResult();
-                                    assert snapshot != null;
-                                    title= snapshot.get("item_category").toString()+":"+snapshot.get("item_brand").toString();
-                                    userIdTo=mapList.get(index).get("user_id").toString();
+        else {
+            final DocumentReference dref = FirebaseFirestore.getInstance().collection("Lost Items").document(doc_id);
 
-                                    FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                             usertoken=dataSnapshot.getValue(String.class);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                    sendNotification(usertoken, title, message,index1);
-                                 }
-                            }
-                        });
-                    }
-                })
-
-                .setNegativeButton("No, Delete!", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                replies.remove(index);
-                adapter.notifyItemRemoved(index);
-                message="Your answer doesn't match the required credentials, so your product request has been declined!";
-                dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-
-                            DocumentSnapshot snapshot=task.getResult();
-                            assert snapshot != null;
-                            title= snapshot.get("item_category").toString()+":"+snapshot.get("item_brand").toString();
-                            userIdTo=mapList.get(index).get("user_id").toString();
-                            mapList.remove(index);
-                            dref.update("answers", mapList);
-                            FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RepliesActivity.this);
+            alertDialog.setTitle("Is That Enough?").setMessage("Please Make Sure that enough details are provided for Verification")
+                    .setPositiveButton("Yes, Verify!", new DialogInterface.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.N)
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mapList.get(index).replace("verified", true);
+                            ArrayList<HashMap> list = new ArrayList<>();
+                            list.add(mapList.get(index));
+                            dref.update("answers", list);
+                            replies.removeAll(replies);
+                            replies.add(new Reply(Objects.requireNonNull(mapList.get(index).get("username")).toString(),
+                                    Objects.requireNonNull(mapList.get(index).get("answer")).toString()));
+                            adapter.notifyDataSetChanged();
+                            message = "Your details have been verified. You can now find the contact details of that person in the Lost Section!";
+                            dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                     usertoken=dataSnapshot.getValue(String.class);
-                                }
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot snapshot = task.getResult();
+                                        assert snapshot != null;
+                                        title = snapshot.get("item_category").toString() + ":" + snapshot.get("item_brand").toString();
+                                        userIdTo = mapList.get(index).get("user_id").toString();
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                usertoken = dataSnapshot.getValue(String.class);
 
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                        sendNotification(usertoken, title, message, index1);
+                                    }
                                 }
                             });
-                            sendNotification(usertoken, title, message,index1);
                         }
-                    }
-                });
-            }
-        }).show();
+                    })
+
+                    .setNegativeButton("No, Delete!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            replies.remove(index);
+                            adapter.notifyItemRemoved(index);
+                            message = "Your answer doesn't match the required credentials, so your product request has been declined!";
+                            dref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+
+                                        DocumentSnapshot snapshot = task.getResult();
+                                        assert snapshot != null;
+                                        title = snapshot.get("item_category").toString() + ":" + snapshot.get("item_brand").toString();
+                                        userIdTo = mapList.get(index).get("user_id").toString();
+                                        mapList.remove(index);
+                                        dref.update("answers", mapList);
+                                        FirebaseDatabase.getInstance().getReference().child("Tokens").child(userIdTo).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                usertoken = dataSnapshot.getValue(String.class);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                        sendNotification(usertoken, title, message, index1);
+                                    }
+                                }
+                            });
+                        }
+                    }).show();
+        }
     }
 
     public void sendNotification(String userToken, String title, String message, int id){
