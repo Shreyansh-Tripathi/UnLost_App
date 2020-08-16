@@ -49,7 +49,9 @@ import static com.example.unlost.notification.NotificationChannel.channelId;
 public class EditNoteActivity extends AppCompatActivity {
 
     EditText editnoteTitle, editnoteContent;
-    ImageButton cameraBtn, galleryBtn, reminderBtn, deletebtn, goBackbtn,saveNotebtn;
+    ImageButton cameraBtn, galleryBtn, deletebtn, goBackbtn,saveNotebtn;
+    @SuppressLint("StaticFieldLeak")
+    static ImageButton reminderBtn;
     static CountDownTimer reminder;
     @SuppressLint("StaticFieldLeak")
     static NotificationManagerCompat manager;
@@ -63,7 +65,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private static String selectedImagePath1="",selectedImagePath2="",selectedImagePath3="";
     ImageView imgShow1,imgShow2,imgShow3;
     LinearLayout imgLayout;
-    private Note availableNote,newNote=new Note();
+    private static Note availableNote,newNote=new Note();
     static MediaPlayer player;
     public static String notificationButton = "Turn Off";
 
@@ -111,13 +113,6 @@ public class EditNoteActivity extends AppCompatActivity {
             newNote.setId(availableNote.getId());
         }
 
-        if (!getActiveTimer()){
-            reminderBtn.setImageResource(R.drawable.reminder_off);
-        }
-        else {
-            reminderBtn.setImageResource(R.drawable.reminder_on);
-        }
-
         if (TextUtils.isEmpty(editnoteContent.getText().toString().trim()) && TextUtils.isEmpty(editnoteTitle.getText().toString().trim()))
         {
             deletebtn.setVisibility(View.GONE);
@@ -125,7 +120,6 @@ public class EditNoteActivity extends AppCompatActivity {
         else {
             deletebtn.setVisibility(View.VISIBLE);
         }
-
 
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,6 +268,12 @@ public class EditNoteActivity extends AppCompatActivity {
     private void setNote() {
         editnoteTitle.setText(availableNote.getTitle());
         editnoteContent.setText(availableNote.getDescription());
+        if (!availableNote.isActiveTimer()){
+            reminderBtn.setImageResource(R.drawable.reminder_off);
+        }
+        else {
+            reminderBtn.setImageResource(R.drawable.reminder_on);
+        }
         if(availableNote.getImagePath1() != null)
         {
             imgLayout.setVisibility(View.VISIBLE);
@@ -294,6 +294,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     private void openCamera() {
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         if(intent.resolveActivity(getPackageManager())!=null)
         {
             startActivityForResult(intent,REQUEST_CODE_CAPTURE_IMAGE);
@@ -352,8 +353,8 @@ public class EditNoteActivity extends AppCompatActivity {
         }
 
         if (availableNote!=null){
-            newNote.setId(availableNote.getId());
             newNote.setActiveTimer(getActiveTimer());
+            newNote.setId(availableNote.getId());
         }
 
         @SuppressLint("StaticFieldLeak")
@@ -414,7 +415,7 @@ public class EditNoteActivity extends AppCompatActivity {
     }
     private Uri getImageUri(Context context, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 1000, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
@@ -429,7 +430,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 if(imgShow1.getDrawable()==null)
                 {
                     imgShow1.setVisibility(View.VISIBLE);
-                    imgShow1.setImageBitmap(bitmap);
+                    imgShow1.setImageURI(imageUri);
                     selectedImagePath1=getPathFromUri(imageUri);
                 }
                 else if(imgShow2.getDrawable()==null)
