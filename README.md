@@ -1,7 +1,5 @@
 # UnLost_App
-UnLost App project code
- master
-hello
+Find It App project code
 
 This app is made using android studio.
  master
